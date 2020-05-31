@@ -1,0 +1,7 @@
+//include ':app', ':SocialLibrary'
+include ':wxlibrary'
+include ':wblibrary'
+include ':testapp'
+include ':alilibrary'
+include ':qqlibrary'
+include ':socialcommon'

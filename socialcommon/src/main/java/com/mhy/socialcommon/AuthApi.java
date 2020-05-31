@@ -1,0 +1,129 @@
+package com.mhy.socialcommon;
+
+import android.app.Activity;
+import android.content.Intent;
+
+/**
+ * 社会化组件基类实现
+ */
+public abstract class AuthApi {
+
+    protected Activity mActivity;
+
+    private static int mAuthType;
+
+    protected static OnAuthListener mOnAuthListener;
+
+    public AuthApi(Activity act, OnAuthListener l) {
+        mActivity=act;
+        setAuthListener(l);
+    }
+
+
+    /**
+     * 设置社会化类型
+     *
+     * @param authType type
+     */
+    protected void setAuthType(int authType) {
+        mAuthType = authType;
+    }
+
+    /**
+     * 获取社会化类型
+     *
+     * @return 类型 {@link SocialType}
+     */
+    protected int getAuthType() {
+        return mAuthType;
+    }
+
+
+//    public abstract void doAuth(String mInfo);
+
+/**
+ * qq weibo 需要
+ */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (getAuthType()) {
+////            case AuthType.QQ:
+////                if (requestCode == Constants.REQUEST_LOGIN) {
+////                    Tencent.handleResultData(data, ((QQAuth)this).getUIListener());
+////                }
+////                break;
+////            case AuthType.WEIBO:
+////                SsoHandler ssoHandler = ((WeiboAuth)this).getSsoHandler();
+////                if(ssoHandler != null) {
+////                    ((WeiboAuth) this).getSsoHandler().authorizeCallBack(requestCode, resultCode, data);
+////                }
+////                break;
+//            case SocialType.WEIXIN_Auth:
+//
+//                break;
+//        }
+    }
+
+    public void setAuthListener(OnAuthListener l) {
+        mOnAuthListener = l;
+    }
+
+    /**
+     * 登陆成功回调
+     */
+    public static void setCompleteCallBack(Object user) {
+        if (mOnAuthListener != null) {
+            mOnAuthListener.onComplete(mAuthType, user);
+        }
+    }
+
+    /**
+     * 登陆错误回调
+     */
+    public static void setErrorCallBack(String error) {
+        if (mOnAuthListener != null) {
+            mOnAuthListener.onError(mAuthType, error);
+        }
+    }
+
+    /**
+     * 登陆取消回调
+     */
+    public static void setCancelCallBack() {
+        if (mOnAuthListener != null) {
+            mOnAuthListener.onCancel(mAuthType);
+        }
+    }
+
+    /**
+     * 释放资源
+     */
+    public static void release() {
+        mOnAuthListener = null;
+    }
+
+    public interface OnAuthListener {
+
+        /**
+         * 成功
+         *
+         * @param type 登陆类型
+         * @param user 返回实体
+         */
+        void onComplete(int type, Object user);
+
+        /**
+         * 失败
+         *
+         * @param type  登陆类型
+         * @param error 失败原因
+         */
+        void onError(int type, String error);
+
+        /**
+         * 用户取消
+         *
+         * @param type 登陆类型
+         */
+        void onCancel(int type);
+    }
+}
