@@ -140,6 +140,10 @@ public class QqAuth extends AuthApi {
         return false;
     }
 
+    /**
+     * 是否安装qq
+     * @return true 是
+     */
     public boolean isInstallQQ() {
         return mTencent.isQQInstalled(mActivity);
     }
@@ -194,6 +198,9 @@ public class QqAuth extends AuthApi {
         }
     }
 
+    /**
+     * 退出登陆
+     */
     public void doLogOut() {
         if (mTencent != null && mTencent.isSessionValid()) {
             mTencent.logout(mActivity);//登录成功注销

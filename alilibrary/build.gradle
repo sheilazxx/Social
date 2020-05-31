@@ -23,7 +23,8 @@ android {
     repositories {
         flatDir {
         dirs 'libs'
-    }}
+        }
+    }
 
     lintOptions {
         abortOnError false
@@ -45,7 +46,7 @@ publish {
     userOrg = 'mhylib'// 用户所在组织,好像是用户名
     groupId = 'com.mhy.social'// 包名
     artifactId = 'ali'// library项目的名字
-    publishVersion = '1.1.0'// 版本
+    publishVersion = rootProject.ext.publish.version// 版本
     desc = 'build social SDK'//不中文
     website = "https://github.com/mahongyin/Social"//你的开源地址，注意，一定要用GitHub地址
 }
@@ -55,8 +56,9 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation project(path: ':socialcommon')
+//    implementation project(path: ':socialcommon')
+    implementation 'com.mhy.social:common:1.1.0'
     // 支付宝 SDK AAR 包所需的配置
-    api (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
+    implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
 
 }

@@ -40,7 +40,7 @@ publish {
     userOrg = 'mhylib'// 用户所在组织,好像是用户名
     groupId = 'com.mhy.social'// 包名
     artifactId = 'wx'// library项目的名字
-    publishVersion = '1.1.0'// 版本
+    publishVersion = rootProject.ext.publish.version// 版本
     desc = 'build social SDK'//不中文
     website = "https://github.com/mahongyin/Social"//你的开源地址，注意，一定要用GitHub地址
 }
@@ -53,5 +53,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
 //    api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.4.0'
     api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.4'
-    implementation project(path: ':socialcommon')
+//    implementation project(path: ':socialcommon')
+    implementation 'com.mhy.social:common:1.1.0'
 }

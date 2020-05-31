@@ -1,4 +1,3 @@
-//include ':app', ':SocialLibrary'
 include ':wxlibrary'
 include ':wblibrary'
 include ':testapp'

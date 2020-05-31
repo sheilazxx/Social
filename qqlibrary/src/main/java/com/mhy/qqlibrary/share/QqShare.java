@@ -64,7 +64,7 @@ public class QqShare extends ShareApi {
         @Override
         public void onError(UiError uiError) {
 //            Toast.makeText(context, "登录失败", Toast.LENGTH_SHORT).show();
-            callbackShareFail(uiError.errorMessage);
+            callbackShareFail("登录失败"+uiError.errorMessage);
         }
         @Override
         public void onCancel() {

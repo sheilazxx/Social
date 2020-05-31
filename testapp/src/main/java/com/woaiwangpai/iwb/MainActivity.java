@@ -34,6 +34,7 @@ import com.mhy.wxlibrary.bean.WxPayContent;
 import com.mhy.wxlibrary.bean.WxShareEntity;
 import com.mhy.wxlibrary.pay.WxPay;
 import com.mhy.wxlibrary.share.WxShare;
+import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     AuthApi api;
     ShareApi spi;
+
     Animation shake;
 
     @Override
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         copy();//准备资源
-        shake= AnimationUtils.loadAnimation(this, R.anim.shake);
+        shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 
 
         //微信分享
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 WxShare mShareApi = new WxShare(MainActivity.this, ShareEntity.TYPE_WX, onShareListener);
                 mShareApi.doShare(createWXShareEntity(false));
-v.startAnimation(shake);
+                v.startAnimation(shake);
             }
         });
         //微信朋友圈分享
@@ -85,7 +87,8 @@ v.startAnimation(shake);
             @Override
             public void onClick(View v) {
                 WxShare mShareApi = new WxShare(MainActivity.this, ShareEntity.TYPE_PYQ, onShareListener);
-                mShareApi.doShare(createWXShareEntity(true));v.startAnimation(shake);
+                mShareApi.doShare(createWXShareEntity(true));
+                v.startAnimation(shake);
             }
         });
         //微信登录
@@ -95,7 +98,8 @@ v.startAnimation(shake);
 //                WxAuth wxAuth=new WxAuth(MainActivity.this, onAuthListener);
 //                wxAuth.doAuth();
                 WxAuth authApi = new WxAuth(MainActivity.this, onAuthListener);
-                authApi.doAuth();v.startAnimation(shake);
+                authApi.doAuth();
+                v.startAnimation(shake);
 
             }
         });
@@ -104,7 +108,8 @@ v.startAnimation(shake);
             @Override
             public void onClick(View v) {
                 QqAuth authApi = new QqAuth(MainActivity.this, onAuthListener);
-                authApi.doAuth(false);v.startAnimation(shake);
+                authApi.doAuth(false);
+                v.startAnimation(shake);
                 api = authApi;//onActivityResult()内使用
             }
         });
@@ -112,20 +117,19 @@ v.startAnimation(shake);
         findViewById(R.id.btn_share_local).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               v.startAnimation(shake);
-                ShareUtil shareUtil=new ShareUtil(MainActivity.this);
+                v.startAnimation(shake);
+                ShareUtil shareUtil = new ShareUtil(MainActivity.this);
 //                shareUtil.shareFile(new File(getExternalFilesDir(null) + "/ccc.JPG"));
                 shareUtil.shareText("【flutter凉了吗?】知乎：… https://www.zhihu.com/question/374113031/answer/1253795562?utm_source=com.eg.android.alipaygphone&utm_medium=social&utm_oi=1020568397012209664 （分享自知乎网）");
             }
         });
         //长按 打开小程序
-        findViewById(R.id.btn_login_qq).setOnLongClickListener(new View.OnLongClickListener() {
+        findViewById(R.id.btn_mini_qq).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 v.startAnimation(shake);
                 QqAuth authApi = new QqAuth(MainActivity.this, onAuthListener);
-                authApi.doOpenMiniApp("1108108864","pages/tabBar/index/index","release");
-                return true;//不响应其他事件
+                authApi.doOpenMiniApp("1108108864", "pages/tabBar/index/index", "release");
             }
         });
         //qq分享
@@ -134,7 +138,8 @@ v.startAnimation(shake);
             public void onClick(View v) {
                 QqShare mShareApi = new QqShare(MainActivity.this, SocialType.QQ_Share, onShareListener);
                 mShareApi.doShare(QQShareEntity.createImageInfo(getExternalFilesDir(null) + "/aaa.png", "app"));
-                spi = mShareApi;v.startAnimation(shake);
+                spi = mShareApi;
+                v.startAnimation(shake);
             }
         });
         //qq空间分享
@@ -146,7 +151,8 @@ v.startAnimation(shake);
                 imgUrls.add(getExternalFilesDir(null) + "/bbb.jpg");
                 QqShare mShareApi = new QqShare(MainActivity.this, SocialType.QQ_ZONE_Share, onShareListener);
                 mShareApi.doShare(QQShareEntity.createImageTextInfoToQZone("toptitle", "http://www.baidu.com", imgUrls, "summary", "我"));
-                spi = mShareApi;v.startAnimation(shake);
+                spi = mShareApi;
+                v.startAnimation(shake);
             }
         });
         //支付宝登陆
@@ -154,7 +160,8 @@ v.startAnimation(shake);
             @Override
             public void onClick(View v) {
                 AliAuth authApi = new AliAuth(MainActivity.this, onAuthListener);
-                authApi.doAuth("");v.startAnimation(shake);
+                authApi.doAuth("");
+                v.startAnimation(shake);
             }
         });
         //支付宝支付
@@ -176,13 +183,13 @@ v.startAnimation(shake);
                     jsonObject = jsonObject.getJSONObject("pay_message");
 
                     WxPayContent req = new WxPayContent(
-                    jsonObject.getString("appid"),
-                    jsonObject.getString("partnerid"),
-                    jsonObject.getString("prepayid"),
-                    jsonObject.getString("packagestr"),
-                    jsonObject.getString("noncestr"),
-                    jsonObject.getString("timestamp"),
-                    jsonObject.getString("sign"));
+                            jsonObject.getString("appid"),
+                            jsonObject.getString("partnerid"),
+                            jsonObject.getString("prepayid"),
+                            jsonObject.getString("packagestr"),
+                            jsonObject.getString("noncestr"),
+                            jsonObject.getString("timestamp"),
+                            jsonObject.getString("sign"));
                     PayApi wxApi = new WxPay(MainActivity.this, onPayListener);
                     wxApi.doPay(req);
                     v.startAnimation(shake);
@@ -192,12 +199,15 @@ v.startAnimation(shake);
             }
         });
         //小程序分享
-        findViewById(R.id.btn_pay_wx).setOnLongClickListener(new View.OnLongClickListener() {
+        findViewById(R.id.btn_mini_wx).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 v.startAnimation(shake);
-//               WxShareEntity.createMiniApp(String miniAppid,String miniPath,String webpageUrl,String title,String desc,String imgUrl);
-                return true;//no >
+//            WxShare wxShare=new WxShare(MainActivity.this,SocialType.WEIXIN_Share,onShareListener);
+//            wxShare.doShare(WxShareEntity.createMiniApp( miniAppid, miniPath, webpageUrl, title, desc, imgUrl));
+
+                WxAuth wxAuth = new WxAuth(MainActivity.this, onAuthListener);
+                wxAuth.doOpenMiniApp("gh_d43f693ca31f", "", WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE);
             }
         });
         //微博分享
@@ -206,7 +216,8 @@ v.startAnimation(shake);
             public void onClick(View v) {
                 WbShare wbShare = new WbShare(MainActivity.this, SocialType.WEIBO_Share, onShareListener);
                 wbShare.doShareStory(WbShareEntity.createImageStory(getExternalFilesDir(null) + "/aaa.png"));
-                spi = wbShare;v.startAnimation(shake);
+                spi = wbShare;
+                v.startAnimation(shake);
             }
         });
         //微博登录
@@ -215,7 +226,8 @@ v.startAnimation(shake);
             public void onClick(View v) {
                 WbAuth wbAuth = new WbAuth(MainActivity.this, onAuthListener);
                 wbAuth.doAuth();
-                api = wbAuth;v.startAnimation(shake);
+                api = wbAuth;
+                v.startAnimation(shake);
             }
         });
     }
@@ -224,7 +236,23 @@ v.startAnimation(shake);
     private AuthApi.OnAuthListener onAuthListener = new AuthApi.OnAuthListener() {
         @Override
         public void onComplete(int type, Object user) {
-//            wx((WeiXin)user).getCode(); wb（Oauth2AccessToken）user ;ali AuthResult
+            switch (type){
+                case SocialType.ALIPAY_Auth:
+//                    ali AuthResult
+                    break;
+                case SocialType.QQ_Auth:
+//                    JSONObject data = (JSONObject) user;
+//                    String openID = data.getString("openid");
+//                    String accessToken = data.getString("access_token");
+//                    String expires = data.getString("expires_in");
+                    break;
+                case SocialType.WEIBO_Auth:
+//                    wb（Oauth2AccessToken）user
+                break;
+                case SocialType.WEIXIN_Auth:
+//                    wx((WeiXin)user).getCode()
+                    break;
+            }
             Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
         }
 
@@ -270,15 +298,16 @@ v.startAnimation(shake);
         //微博和QQ需要
         if (api != null) {
             api.onActivityResult(requestCode, resultCode, data);
-            api=null;
+            api = null;
         }
         if (spi != null) {
             spi.onActivityResult(requestCode, resultCode, data);
-            spi=null;
+            spi = null;
         }
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+
     @Override
     protected void onStart() {
         Log.d("TAG", "-->onStart");
@@ -292,16 +321,17 @@ v.startAnimation(shake);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionMgr.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         //xx
-        if(1111==requestCode){
+        if (1111 == requestCode) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             } else {
-                Toast.makeText(MainActivity.this,"Please give me storage permission!",Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Please give me storage permission!", Toast.LENGTH_LONG).show();
             }
             return;
         }
     }
-//xx
+
+    //xx
     private void checkPermission() {
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {

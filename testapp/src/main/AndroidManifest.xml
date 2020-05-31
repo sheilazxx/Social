@@ -39,7 +39,9 @@
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             />
+
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
