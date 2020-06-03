@@ -20,7 +20,18 @@
 分享：
 qq分享，qq空间分享，微博分享，微博故事分享，微信分享，微信朋友圈分享  系统原生分享
 <br><br><br>
-<B>集成方法：</B>
+<B>集成方法1：</B>
+
+```
+implementation 'com.mhy.social:common:1.2'
+implementation 'com.mhy.social:ali:1.2'
+implementation 'com.mhy.social:wx:1.2'
+implementation 'com.mhy.social:wb:1.2'
+implementation 'com.mhy.social:qq:1.2'
+//没错 1.2就是懒人版，sdk均已内置 仅依赖本库即可
+```
+
+<B>集成方法2：</B>
 
 ```
 //如果需要集成微博 、支付宝 根 添加如下
@@ -32,31 +43,34 @@ allprojects {
 }
 ```
 
+//主库必须依赖
+
 ```
 //无论使用本库任一library都必须依赖此library
 //此库未依赖任何第三方，仅支持系统分享、支付宝个人首款码支付，跳转微信扫一扫页面 
-    implementation 'com.mhy.social:common:1.1.1'
+    implementation 'com.mhy.social:common:1.2.2'
 ```
 
   //以下按需依赖
 
 ```
 //支付宝  
-    implementation 'com.mhy.social:ali:1.1.1'
-    //把aar放入libs
+    implementation 'com.mhy.social:ali:1.2.2'
     implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
 ```
 
 ```
 //QQ
-   implementation 'com.mhy.social:qq:1.1.1'
+   implementation 'com.mhy.social:qq:1.2.2'
+   implementation files('libs/open_sdk_r8353806_lite.jar')
 //微信
-    implementation 'com.mhy.social:wx:1.1.1'
+    implementation 'com.mhy.social:wx:1.2.2'
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.4'
 ```
 
 ```
-//微博  
-  implementation 'com.mhy.social:wb:1.1.1'
+//微博   不支持x86
+  implementation 'com.mhy.social:wb:1.2.2'
    implementation 'com.sina.weibo.sdk:core:9.12.0:openDefaultRelease@aar'
 ```
 
