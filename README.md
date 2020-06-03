@@ -2,25 +2,25 @@
 
 微信 微博 支付宝 QQ 【 登陆 、分享、支付  原生分享】 。独立library 调用方便 详看文档
 
-![](social.png)
+![img](social.png)
 
 本Library各包均单独使用其中common库必须依赖，截止2020-05-31，
 
 微博使用最新的9.12.0.aar  需要主app工程集成。
 
-支付宝需要libs下添加aar 。QQ是最新的已经内置。微信是最新的已经内置6.6.4。
+支付宝需要libs下添加aar 。QQ339/微信是最新6.6.4。
 
 银联、QQ、京东 支付后续添加
 
 <B>主要提供服务：</B><br>
 支付：
-微信支付，支付宝支付，银联暂未封装入<br>
+微信支付，支付宝支付，银联/qq暂未封装入<br>
 登录：
 支付宝授权，微信授权，qq授权，微博授权<br>
 分享：
 qq分享，qq空间分享，微博分享，微博故事分享，微信分享，微信朋友圈分享  系统原生分享
 <br><br><br>
-<B>集成方法1：</B>
+<B>集成方法1：</B>推荐![](https://img.shields.io/badge/懒人版-1.2-bule.svg)
 
 ```
 implementation 'com.mhy.social:common:1.2'
@@ -31,7 +31,8 @@ implementation 'com.mhy.social:qq:1.2'
 //没错 1.2就是懒人版，sdk均已内置 仅依赖本库即可
 ```
 
-<B>集成方法2：</B>
+
+<B>集成方法2：</B>![](https://img.shields.io/badge/版本-1.2.2-brightgreen.svg)
 
 ```
 //如果需要集成微博 、支付宝 根 添加如下
@@ -73,7 +74,7 @@ allprojects {
   implementation 'com.mhy.social:wb:1.2.2'
    implementation 'com.sina.weibo.sdk:core:9.12.0:openDefaultRelease@aar'
 ```
-
+//////////////////////////////////////////////////////////////////////////////////////
 **AndroidManifest.xml配置**
 
 ```

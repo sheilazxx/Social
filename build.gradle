@@ -25,7 +25,7 @@ allprojects {
 //        flatDir {
 //            dirs 'libs'
 //        }
-        maven { url "https://dl.bintray.com/mhylib/maven"}
+//        maven { url "https://dl.bintray.com/mhylib/maven"}
 //        maven { url "https://jitpack.io" } //审核后可使用
 
     }
