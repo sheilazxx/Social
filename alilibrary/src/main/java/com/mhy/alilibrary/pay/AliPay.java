@@ -53,6 +53,7 @@ public class AliPay extends PayApi {
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
+        @Override
         @SuppressWarnings("unused")
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -117,7 +118,7 @@ public class AliPay extends PayApi {
     /**
      * 获取支付宝 SDK 版本号。
      */
-    public String showSdkVersion(View v) {
+    public String showSdkVersion() {
         PayTask payTask = new PayTask(mAct);
         return payTask.getVersion();
 

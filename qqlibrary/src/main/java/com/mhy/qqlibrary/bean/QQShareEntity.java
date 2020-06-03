@@ -162,8 +162,15 @@ public final class QQShareEntity extends ShareEntity {
 
     /**
      * 创建分享小程序
-     * @param title
-     * @return
+     * @param title 1
+     * @param imgUrl 1
+     * @param targetUrl 1
+     * @param summary 11
+     * @param appName 1
+     * @param miniAppid 1
+     * @param miniAppPath 1
+     * @param miniAppType 1
+     * @return ShareEntity
      */
     public static ShareEntity createMiniAppToQQ(@ParamsRequired String title, String imgUrl, String targetUrl, String summary, String appName, String miniAppid, String miniAppPath, String miniAppType) {
         ShareEntity entity = new ShareEntity(TYPE_QQ);
@@ -180,7 +187,17 @@ public final class QQShareEntity extends ShareEntity {
 
         return entity;
     }
-
+    /**
+     * 创建分享小程序
+     * @param title 1
+     * @param imageUrls 1s
+     * @param targetUrl 1
+     * @param summary 11
+     * @param miniAppid 1
+     * @param miniAppPath 1
+     * @param miniAppType 1
+     * @return ShareEntity
+     */
     public static ShareEntity createMiniAppToQZone(@ParamsRequired String title, ArrayList<String> imageUrls, String summary, String targetUrl, String miniAppid, String miniAppPath, String miniAppType) {
         ShareEntity entity = new ShareEntity(TYPE_PUBLISH);
         addParams(entity.params, QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_MINI_PROGRAM);

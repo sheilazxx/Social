@@ -4,18 +4,21 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.mhy.alilibrary.auth.AliAuth;
 import com.mhy.alilibrary.bean.AliPayContent;
+import com.mhy.alilibrary.bean.AuthResult;
 import com.mhy.alilibrary.pay.AliPay;
 import com.mhy.qqlibrary.auth.QqAuth;
 import com.mhy.qqlibrary.bean.QQShareEntity;
@@ -30,10 +33,12 @@ import com.mhy.wblibrary.auth.WbAuth;
 import com.mhy.wblibrary.bean.WbShareEntity;
 import com.mhy.wblibrary.share.WbShare;
 import com.mhy.wxlibrary.auth.WxAuth;
+import com.mhy.wxlibrary.bean.WeiXin;
 import com.mhy.wxlibrary.bean.WxPayContent;
 import com.mhy.wxlibrary.bean.WxShareEntity;
 import com.mhy.wxlibrary.pay.WxPay;
 import com.mhy.wxlibrary.share.WxShare;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 
 import org.json.JSONException;
@@ -50,12 +55,12 @@ public class MainActivity extends AppCompatActivity {
     private ShareEntity createWXShareEntity(boolean pyq) {
         ShareEntity shareEntity = null;
 
-//        shareEntity = WxShareEntity.createImageInfo(pyq, Environment.getExternalStorageDirectory() + "/fdmodel.jpg");
+        shareEntity = WxShareEntity.createImageInfo(pyq, getExternalFilesDir(null) + "/fff.jpg");
 
         //微信图文是分开的，但是在分享到朋友圈的web中是可以有混合的
 //        shareEntity = WxShareEntity.createTextInfo(pyq, "R.mipmap.ic_launcher");
 
-        shareEntity = WxShareEntity.createWebPageInfo(pyq, "http://www.baidu.com", R.mipmap.ic_launcher, "title", "summary");
+//        shareEntity = WxShareEntity.createWebPageInfo(pyq, "http://www.baidu.com", R.mipmap.ic_launcher, "title", "summary");
 
         return shareEntity;
     }
@@ -160,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AliAuth authApi = new AliAuth(MainActivity.this, onAuthListener);
-                authApi.doAuth("");
+                authApi.doAuth("apiname=com.alipay.account.auth&app_id=2019052365375081&app_name=mc&auth_type=AUTHACCOUNT&biz_type=openservice&pid=2088921472692589&product_id=APP_FAST_LOGIN&scope=kuaijie&target_id=kkkkk091125&sign_type=RSA2&sign=O5EBUVb5j60vt%252FJXGSiSAY1EWtrSrUx1KAXnXCPC2NmdwY35aovHzVmafuUyj%252FV57rt2PpD255OAASNojjN5hrxaDZI2snqPMfTulklwDdmUhd%252BrsziLdvmcNIdXneCPgHrrdkKTIRkg%252BBLFMdXSQ5hNZBeEEC8ySQiaJ%252Fvbd9UOofb8bxd1ZMMPCVCIeDDd34HaW8xuCl8x%252F6cMIN3n3qqcXGcegh4TVyI5nAeOr5lJ0PJv0byKxxqnZKNUsJy2Wzm7TXk3Zc1qxcedE5Giff6y2QP8wXBuY3ZOQJJByaM4vFgbBoVHpo88ElbbTy30Aex%252Fq7v7tz8850kTfvx1gA%253D%253D");//appid
                 v.startAnimation(shake);
             }
         });
@@ -169,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AliPay authApi = new AliPay(MainActivity.this, onPayListener);
-                authApi.doPay(new AliPayContent(""));
+                authApi.doPay(new AliPayContent("alipay_sdk=alipay-sdk-php-20180705&app_id=2018111362152255&biz_content=%7B%22body%22%3A%22%E5%85%85%E5%80%BC%E7%88%B1%E8%B1%86%22%2C%22subject%22%3A+%22%E5%85%85%E5%80%BC%E7%88%B1%E8%B1%86%22%2C%22out_trade_no%22%3A+%222020060211083065315693%22%2C%22timeout_express%22%3A+%2230m%22%2C%22total_amount%22%3A+%221%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%7D&charset=UTF-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fapi.alpha.woaiwangpai.com%2Fapi%2FIntegral%2FnotifyHandle&sign_type=RSA2&timestamp=2020-06-02+11%3A08%3A39&version=1.0&sign=Qt0h%2BWRrK2NcmGrFQNPLEbdVQorUoX8RKRgaru87kY69gimuZzuT4ihT73CaKvKgLc7QmtRsPZYvQ1TyuxScncr%2FDRLCiaStc7YO6srNVp41ZVCmTDrUCdMVQf5wJ5zFTASOtkRlfK2ucwPedeC2I2YKj1uIoi5w79l3iELV34tLRSyZZukf73%2Bl%2FU3Xbgk4u0hgL4wfyyhMGULXer21sK4ZzBpquBJYVelIco5uQycHlN0YZOYyXYHBGufN%2Ff%2Bb6EsVaAxwPDAbdPq9EUaC7HDvOGTEVvO90so2%2FcrXR%2Fd55kj3lM67r8Xca9gqrQyVDx07XycLwjJHjiViEL3h4Q%3D%3D"));
                 v.startAnimation(shake);
             }
         });
@@ -230,30 +235,71 @@ public class MainActivity extends AppCompatActivity {
                 v.startAnimation(shake);
             }
         });
+        /**
+         * 将 H5 网页版支付转换成支付宝 App 支付的示例
+         */
+        findViewById(R.id.btn_pay_alipay).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                WebView.setWebContentsDebuggingEnabled(true);
+                Intent intent = new Intent(MainActivity.this, H5PayDemoActivity.class);
+                Bundle extras = new Bundle();
+
+                /*
+                 * URL 是要测试的网站，在 Demo App 中会使用 H5PayDemoActivity 内的 WebView 打开。
+                 *
+                 * 可以填写任一支持支付宝支付的网站（如淘宝或一号店），在网站中下订单并唤起支付宝；
+                 * 或者直接填写由支付宝文档提供的“网站 Demo”生成的订单地址
+                 * （如 https://mclient.alipay.com/h5Continue.htm?h5_route_token=303ff0894cd4dccf591b089761dexxxx）
+                 * 进行测试。
+                 *
+                 * H5PayDemoActivity 中的 MyWebViewClient.shouldOverrideUrlLoading() 实现了拦截 URL 唤起支付宝，
+                 * 可以参考它实现自定义的 URL 拦截逻辑。
+                 */
+                String url = "https://m.taobao.com";
+                extras.putString("url", url);
+                intent.putExtras(extras);
+                startActivity(intent);
+                return true;
+            }
+        });
+
     }
 
     //登陆回调
     private AuthApi.OnAuthListener onAuthListener = new AuthApi.OnAuthListener() {
         @Override
         public void onComplete(int type, Object user) {
-            switch (type){
+            switch (type) {
                 case SocialType.ALIPAY_Auth:
 //                    ali AuthResult
+                    AuthResult authResult = (AuthResult) user;
+                    Log.e("code交给后端和登陆绑定手机等逻辑", authResult.getAuthCode());
+                    Toast.makeText(MainActivity.this, "支付宝登录成功", Toast.LENGTH_SHORT).show();
                     break;
                 case SocialType.QQ_Auth:
-//                    JSONObject data = (JSONObject) user;
-//                    String openID = data.getString("openid");
-//                    String accessToken = data.getString("access_token");
-//                    String expires = data.getString("expires_in");
+                    Toast.makeText(MainActivity.this, "QQ登录成功", Toast.LENGTH_SHORT).show();
+                    JSONObject data = (JSONObject) user;
+                    try {
+                        String openID = data.getString("openid");
+                        String accessToken = data.getString("access_token");
+                        String expires = data.getString("expires_in");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case SocialType.WEIBO_Auth:
+                    Toast.makeText(MainActivity.this, "微博登录成功", Toast.LENGTH_SHORT).show();
 //                    wb（Oauth2AccessToken）user
-                break;
+                    String accessToken=((Oauth2AccessToken)user).getAccessToken();
+                    break;
                 case SocialType.WEIXIN_Auth:
+                    Toast.makeText(MainActivity.this, "微信登录成功", Toast.LENGTH_SHORT).show();
 //                    wx((WeiXin)user).getCode()
+                    String code=((WeiXin)user).getCode();
                     break;
             }
-            Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+
         }
 
         @Override
@@ -312,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         Log.d("TAG", "-->onStart");
         PermissionMgr.getInstance().requestPermissions(this);
+        PermissionMgr.getInstance().requestExternalStoragePermission(this);
 
         super.onStart();
     }
@@ -325,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             } else {
-                Toast.makeText(MainActivity.this, "Please give me storage permission!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "请授予存储权限!", Toast.LENGTH_LONG).show();
             }
             return;
         }

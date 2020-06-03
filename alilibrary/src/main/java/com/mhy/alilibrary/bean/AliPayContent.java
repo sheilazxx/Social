@@ -23,8 +23,8 @@ public class AliPayContent extends PayContent {
 
 
     /**
-     * 实例化 orderInfo 由后端返回 或自己拼接后传入
-     * @param orderInfo
+     * 实例化 orderInfo
+     * @param orderInfo 由后端返回 或自己拼接后传入
      */
     public AliPayContent(String orderInfo) {
         this.orderInfo = orderInfo;

@@ -50,7 +50,6 @@ public class AliAuth extends AuthApi {
                 AuthTask authTask = new AuthTask(mActivity);
                 // 调用授权接口，获取授权结果
                 Map<String, String> result = authTask.authV2(orderInfo, true);
-
                 Message msg = new Message();
                 msg.what = SDK_AUTH_FLAG;
                 msg.obj = result;

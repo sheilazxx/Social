@@ -219,7 +219,7 @@ public final class WxShareEntity extends ShareEntity {
 
     /**
      * @param miniAppid 小程序 原始gh_id
-     * @param miniPath  小程序路径 默认入口 ？&传参
+     * @param miniPath  小程序路径 默认入口 ？&传参;
      * @param webpageUrl web
      * @param title  标题
      * @param summary  详情

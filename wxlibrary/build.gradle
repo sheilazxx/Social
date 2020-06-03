@@ -5,12 +5,12 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName rootProject.ext.publish.version
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
 
@@ -32,12 +32,13 @@ android {
         }
 
     }
+
 }
 //jcent
 publish {
 
     repoName = 'maven'//maven仓库名
-    userOrg = 'mhylib'// 用户所在组织,好像是用户名
+    userOrg = rootProject.ext.publish.user// 用户所在组织,好像是用户名
     groupId = 'com.mhy.social'// 包名
     artifactId = 'wx'// library项目的名字
     publishVersion = rootProject.ext.publish.version// 版本
@@ -48,11 +49,11 @@ publish {
 
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 //    api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.4.0'
-    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.4'
-//    implementation project(path: ':socialcommon')
-    implementation 'com.mhy.social:common:1.1.0'
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.4'
+    implementation project(path: ':socialcommon')
+//    implementation 'com.mhy.social:common:1.2.0'
 }
