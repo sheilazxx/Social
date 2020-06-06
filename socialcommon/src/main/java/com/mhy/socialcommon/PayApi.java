@@ -49,6 +49,10 @@ public abstract class PayApi {
         mAct = act;
         setOnPayListener(l);
     }
+//    public PayApi(Activity act){
+//        mAct = act;
+//        setOnPayListener(null);
+//    }
 
     /**
      * 调用支付sdk
@@ -104,7 +108,7 @@ public abstract class PayApi {
      * @param urlCode 收款码 /末尾
      */
     public void alipayMe(String urlCode){
-//        urlCode="fkx19953nsokfrvlylqoy86";//00c060630igcenu4bfbud2e/fkx150444qjqymmownj8acb/fkx19568debwbeygnkf6273
+//        urlCode="fkx19568debwbeygnkf6273";//00c060630igcenu4bfbud2e/fkx150444qjqymmownj8acb/
         if (hasInstall("com.eg.android.AlipayGphone")){
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2F"+urlCode+"%3F_s%3Dweb-other"));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

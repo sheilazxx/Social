@@ -363,6 +363,6 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
         });
 ```
 
-```
- 关于分享 使用对应ShareEntity  的createxxx 方法传参调用对应分享内容包装
+```ei
+ 关于分享 使用对应ShareEntity  的createxxx 方法传参调用对应分享内容包装W
 ```
