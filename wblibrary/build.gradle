@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'//jcent
 android {
     compileSdkVersion 28
-    buildToolsVersion "29.0.3"
+
 
     defaultConfig {
         minSdkVersion 17
@@ -20,8 +20,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildscript.repositories {
+        maven { url "http://artifactory.client.weibo.cn/artifactory/ext-release-local/" }
+    }
     repositories {
         maven { url "https://dl.bintray.com/thelasterstar/maven/" }
+        maven { url "http://artifactory.client.weibo.cn/artifactory/ext-release-local/" }
+        maven { url "http://artifactory.client.weibo.cn/artifactory/android_lib_aars/" }
     }
 
     lintOptions {
@@ -36,6 +41,11 @@ android {
         }
 
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '30.0.2'
 
 }
 //jcent
@@ -54,8 +64,8 @@ publish {
 
 dependencies {
 //    api fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.sina.weibo.sdk:core:9.12.0:openDefaultRelease@aar'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.sina.weibo.sdk:core:10.10.0:openDefaultRelease@aar'
 //    implementation (name: 'openDefault-9.12.0', ext: 'aar')
     implementation project(path: ':socialcommon')
 //    implementation 'com.mhy.social:common:1.2.0'

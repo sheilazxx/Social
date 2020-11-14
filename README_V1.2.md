@@ -1,4 +1,4 @@
-# Social  版本 1.2
+# Social  版本 1.3
 
 微信 微博 支付宝 QQ 【 登陆 、分享、支付  原生分享】 。独立library 调用方便 详看文档
 
@@ -14,25 +14,25 @@
 
 <B>主要提供服务：</B><br>
 支付：
-微信支付，支付宝支付，          XXXX银联/qq暂未封装入<br>
+微信支付，支付宝支付，银联/qq暂未封装入<br>
 登录：
 支付宝授权，微信授权，qq授权，微博授权<br>
 分享：
 qq分享，qq空间分享，微博分享，微博故事分享，微信分享，微信朋友圈分享  系统原生分享
 <br><br><br>
-<B>集成方法1：</B>推荐![](https://img.shields.io/badge/懒人版-1.2-bule.svg)
+<B>集成方法1：</B>推荐![](https://img.shields.io/badge/懒人版-1.3-bule.svg)
 
 ```
-implementation 'com.mhy.social:common:1.2'
-implementation 'com.mhy.social:ali:1.2'
-implementation 'com.mhy.social:wx:1.2'
-implementation 'com.mhy.social:wb:1.2'
-implementation 'com.mhy.social:qq:1.2'
-//没错 1.2就是懒人版，sdk均已内置 仅依赖本库即可
+implementation 'com.mhy.social:common:1.3'
+implementation 'com.mhy.social:ali:1.3'
+implementation 'com.mhy.social:wx:1.3'
+implementation 'com.mhy.social:wb:1.3'
+implementation 'com.mhy.social:qq:1.3'
+//没错 1.3就是懒人版，sdk均已内置 仅依赖本库即可
 ```
 
 
-<B>集成方法2：</B>![](https://img.shields.io/badge/版本-1.2.2-brightgreen.svg)
+<B>集成方法2：</B>![](https://img.shields.io/badge/版本-1.3.2-brightgreen.svg)
 
 ```
 //如果需要集成微博 、支付宝 根 添加如下
@@ -49,29 +49,29 @@ allprojects {
 ```
 //无论使用本库任一library都必须依赖此library
 //此库未依赖任何第三方，仅支持系统分享、支付宝个人首款码支付，跳转微信扫一扫页面 
-    implementation 'com.mhy.social:common:1.2.2'
+    implementation 'com.mhy.social:common:1.3.2'
 ```
 
   //以下按需依赖
 
 ```
 //支付宝  
-    implementation 'com.mhy.social:ali:1.2.2'
+    implementation 'com.mhy.social:ali:1.3.2'
     implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
 ```
 
 ```
 //QQ
-   implementation 'com.mhy.social:qq:1.2.2'
+   implementation 'com.mhy.social:qq:1.3.2'
    implementation files('libs/open_sdk_r8353806_lite.jar')
 //微信
-    implementation 'com.mhy.social:wx:1.2.2'
+    implementation 'com.mhy.social:wx:1.3.2'
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.4'
 ```
 
 ```
 //微博   不支持x86
-  implementation 'com.mhy.social:wb:1.2.2'
+  implementation 'com.mhy.social:wb:1.3.2'
    implementation 'com.sina.weibo.sdk:core:9.12.0:openDefaultRelease@aar'
 ```
 //////////////////////////////////////////////////////////////////////////////////////

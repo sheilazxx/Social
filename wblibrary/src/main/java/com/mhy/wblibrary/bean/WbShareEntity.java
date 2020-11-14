@@ -2,6 +2,8 @@ package com.mhy.wblibrary.bean;
 
 import android.os.Bundle;
 
+import androidx.annotation.DrawableRes;
+
 import com.mhy.socialcommon.ShareEntity;
 
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ public class WbShareEntity extends ShareEntity {
 
     public static final String KEY_WB_TYPE = "key_wb_type";
     /**
-     * 依次为：文本，图片，音乐，视频，网页
+     * 依次为：文本，图片，多图，音乐，视频，网页
      */
     public static final int TYPE_TEXT = 0;
     public static final int TYPE_IMG_TEXT = 1;
@@ -97,13 +99,13 @@ public class WbShareEntity extends ShareEntity {
     /**
      * 分享多图
      *
-     * @param images 图片List，最多9张
+     * @param imagePaths 图片路径List，最多9张
      * @param text   文本内容
      */
-    public static ShareEntity createMultiImageInfo(ArrayList<String> images, String text) {
+    public static ShareEntity createMultiImageInfo(ArrayList<String> imagePaths, String text) {
         ShareEntity entity = new ShareEntity(TYPE_WB);
         addParams(entity.params, KEY_WB_TYPE, TYPE_MULTI_IMAGES);
-        addParams(entity.params, KEY_WB_MULTI_IMG, images);
+        addParams(entity.params, KEY_WB_MULTI_IMG, imagePaths);
         addParams(entity.params, KEY_WB_TEXT, text);
         return entity;
     }
@@ -148,27 +150,27 @@ public class WbShareEntity extends ShareEntity {
      * @param webUrl  网页链接
      * @param title   网页标题
      * @param summary 网页摘要
-     * @param img     网页左边图标，应用内图片资源
+     * @param imgRes     网页左边图标，应用内图片资源
      * @param text    文本内容
      */
-    public static ShareEntity createWebInfo(String webUrl, String title, String summary, int img, String text) {
+    public static ShareEntity createWebInfo(String webUrl, String title, String summary,@DrawableRes int imgRes, String text) {
         ShareEntity entity = new ShareEntity(TYPE_WB);
         addParams(entity.params, KEY_WB_TYPE, TYPE_WEB);
         addParams(entity.params, KEY_WB_WEB_URL, webUrl);
         addParams(entity.params, KEY_WB_TEXT, text);
-        addTitleSummaryAndThumb(entity.params, title, summary, img);
+        addTitleSummaryAndThumb(entity.params, title, summary, imgRes);
         return entity;
     }
 
     /**
      * @param title   标题
      * @param summary 摘要
-     * @param imgUrl  本地图片地址
+     * @param imgPath  本地图片地址
      */
-    private static void addTitleSummaryAndThumb(Bundle params, String title, String summary, String imgUrl) {
+    private static void addTitleSummaryAndThumb(Bundle params, String title, String summary, String imgPath) {
         addParams(params, KEY_WB_TITLE, title);
         addParams(params, KEY_WB_SUMMARY, summary);
-        addParams(params, KEY_WB_IMG_LOCAL, imgUrl);
+        addParams(params, KEY_WB_IMG_LOCAL, imgPath);
     }
 
     /**
@@ -176,7 +178,7 @@ public class WbShareEntity extends ShareEntity {
      * @param summary 摘要
      * @param imgRes  应用内图片资源
      */
-    private static void addTitleSummaryAndThumb(Bundle params, String title, String summary, int imgRes) {
+    private static void addTitleSummaryAndThumb(Bundle params, String title, String summary, @DrawableRes int imgRes) {
         addParams(params, KEY_WB_TITLE, title);
         addParams(params, KEY_WB_SUMMARY, summary);
         addParams(params, KEY_WB_IMG_RES, imgRes);

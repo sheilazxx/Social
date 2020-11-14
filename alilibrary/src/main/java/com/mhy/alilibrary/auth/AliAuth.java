@@ -66,28 +66,23 @@ public class AliAuth extends AuthApi {
     private Handler mHandler = new Handler() {
         @SuppressWarnings("unused")
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SDK_AUTH_FLAG: {
-                    @SuppressWarnings("unchecked")
-                    AuthResult authResult = new AuthResult((Map<String, String>) msg.obj, true);
-                    String resultStatus = authResult.getResultStatus();
+            if (msg.what == SDK_AUTH_FLAG) {
+                @SuppressWarnings("unchecked")
+                AuthResult authResult = new AuthResult((Map<String, String>) msg.obj, true);
+                String resultStatus = authResult.getResultStatus();
 
-                    // 判断resultStatus 为“9000”且result_code
-                    // 为“200”则代表授权成功，具体状态码代表含义可参考授权接口文档
-                    if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
-                        // 获取alipay_open_id，调支付时作为参数extern_token 的value
-                        // 传入，则支付账户为该授权账户
+                // 判断resultStatus 为“9000”且result_code
+                // 为“200”则代表授权成功，具体状态码代表含义可参考授权接口文档
+                if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
+                    // 获取alipay_open_id，调支付时作为参数extern_token 的value
+                    // 传入，则支付账户为该授权账户
 //                        showAlert(PayDemoActivity.this, getString(R.string.auth_success) + authResult);
                     setCompleteCallBack(authResult);
-                    } else {
-                        // 其他状态值则为授权失败
+                } else {
+                    // 其他状态值则为授权失败
 //                        showAlert(PayDemoActivity.this, getString(R.string.auth_failed) + authResult);
                     setErrorCallBack(resultStatus);
-                    }
-                    break;
                 }
-                default:
-                    break;
             }
         };
     };

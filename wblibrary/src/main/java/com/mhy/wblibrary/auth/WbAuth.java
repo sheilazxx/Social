@@ -2,6 +2,7 @@ package com.mhy.wblibrary.auth;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -40,32 +41,18 @@ public class WbAuth extends AuthApi {
 
   private boolean cpuX86() {
     String arch = System.getProperty("os.arch");
-    //        String arc=arch.substring(0,3).toUpperCase();//大写
-    assert arch != null;
-    String arc = arch.toUpperCase(); // 大写
-
-//    if (arc.contains("ARM")) {
-//      return false;
-//    } else if (arc.contains("MIP")) {
-//      return false;
-/*    } else*/ if (arc.contains("X86")) {
-      return true;
-    }else {
-        return false;//不让使用
+    String arc = null; // 大写
+    if (arch != null) {
+      arc = arch.toUpperCase();
+      return arc.contains("X86");
     }
-    //        if (Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
-    //            String abi=Build.CPU_ABI;Log.e("ABI2",abi);
-    //        }else {
-    //            String abi= Build.SUPPORTED_ABIS[0];Log.e("ABI3",abi);
-    //
-    //        }
-
+    return false;
   }
 
   public void doAuth() {
-      if (cpuX86()) {
-          return;
-      }
+    if (cpuX86()) {
+      return;
+    }
     // auth
     mWBAPI.authorize(
         new WbAuthListener() {
@@ -88,7 +75,43 @@ public class WbAuth extends AuthApi {
           }
         });
   }
+    private void doClientAuth() {
+        mWBAPI.authorizeClient(new WbAuthListener() {
+            @Override
+            public void onComplete(Oauth2AccessToken token) {
+                setCompleteCallBack(token);
+            }
 
+            @Override
+            public void onError(UiError error) {
+                setErrorCallBack(error.errorMessage);
+            }
+
+            @Override
+            public void onCancel() {
+                setCancelCallBack();
+            }
+        });
+    }
+
+    private void dotWebAuth() {
+        mWBAPI.authorizeWeb(new WbAuthListener() {
+            @Override
+            public void onComplete(Oauth2AccessToken token) {
+                setCompleteCallBack(token);
+            }
+
+            @Override
+            public void onError(UiError error) {
+                setErrorCallBack(error.errorMessage);
+            }
+
+            @Override
+            public void onCancel() {
+                setCancelCallBack();
+            }
+        });
+    }
   @Override
   public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     mWBAPI.authorizeCallback(requestCode, resultCode, data);

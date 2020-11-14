@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.woaiwangpai.iwb"
@@ -15,7 +14,10 @@ android {
     }
     signingConfigs {//签名配置
         release {//release&debug版签名配置
-       
+            storeFile file('../woaiwangpai.jks')//密钥文件路径
+            storePassword "52wangpai"//密钥文件密码
+            keyAlias "wangpai"//key别名
+            keyPassword "52wangpai"//key密码
         }
     }
     buildTypes {
@@ -28,9 +30,19 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '30.0.2'
+    buildscript.repositories {
+        maven { url "http://artifactory.client.weibo.cn/artifactory/ext-release-local/" }
+    }
 
     repositories {
         maven { url "https://dl.bintray.com/thelasterstar/maven/" }
+        maven { url "http://artifactory.client.weibo.cn/artifactory/ext-release-local/" }
+        maven { url "http://artifactory.client.weibo.cn/artifactory/android_lib_aars/" }
         flatDir {
             dirs 'libs'
         }
@@ -39,22 +51,22 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation fileTree(dir: 'libs', include: ['*.aar'])
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation project(path: ':socialcommon')
     implementation project(path: ':wxlibrary')
     implementation project(path: ':wblibrary')
     implementation project(path: ':qqlibrary')
     implementation project(path: ':alilibrary')
-//    implementation 'com.mhy.social:ali:1.2.2'
-//    implementation 'com.mhy.social:qq:1.2.2'
-//    implementation 'com.mhy.social:wb:1.2.2'
-//    implementation 'com.mhy.social:wx:1.2.2'
-//    implementation 'com.mhy.social:common:1.2.2'
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.4'
+//    implementation 'com.mhy.social:ali:1.2'
+//    implementation 'com.mhy.social:qq:1.2'
+//    implementation 'com.mhy.social:wb:1.2'
+//    implementation 'com.mhy.social:wx:1.2'
+//    implementation 'com.mhy.social:common:1.2'
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.5'
     implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
-    implementation 'com.sina.weibo.sdk:core:9.12.0:openDefaultRelease@aar'
+    implementation 'com.sina.weibo.sdk:core:10.10.0:openDefaultRelease@aar'
     implementation files('libs/open_sdk_r8353806_lite.jar')
 }

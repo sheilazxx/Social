@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'//jcent
 android {
     compileSdkVersion 28
-    buildToolsVersion "29.0.3"
+
 
     defaultConfig {
         minSdkVersion 17
@@ -42,6 +42,11 @@ android {
 //            renderscript.srcDirs = ['src/main/rs']
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '30.0.2'
     //multiDex的一些相关配置，这样配置可以让你的编译速度更快
 //    dexOptions {
 //        javaMaxHeapSize "4g"
@@ -73,11 +78,11 @@ publish {
 //Terminal:gradlew clean build bintrayUpload -PbintrayUser=这里填你的JCenter账号 -PbintrayKey=这里填你的APIKey -PdryRun=false
 
 dependencies {
-//    api fileTree(dir: 'libs', include: ['*.jar'])
+//    api fileTree(dir: 'libs', include: ['*.aar'])
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation project(path: ':socialcommon')
 //    implementation 'com.mhy.social:common:1.2.0'
     // 支付宝 SDK AAR 包所需的配置
-    implementation(name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
+    implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
 }

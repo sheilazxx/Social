@@ -1,6 +1,10 @@
 package com.mhy.wxlibrary.bean;
 
 import android.os.Bundle;
+import android.widget.ImageView;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
 
 import com.mhy.socialcommon.ShareEntity;
 
@@ -54,13 +58,13 @@ public final class WxShareEntity extends ShareEntity {
      * 分享图片
      *
      * @param isTimeLine 是否分享到朋友圈，false为微信好友列表，true为朋友圈
-     * @param imgUrl     本地图片地址
+     * @param imgFilePath     本地图片地址
      * @return ShareEntity 分享内容包装
      */
-    public static ShareEntity createImageInfo(boolean isTimeLine, String imgUrl) {
+    public static ShareEntity createImageInfo(boolean isTimeLine, String imgFilePath) {
         ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
         addParams(entity.params, KEY_WX_TYPE, TYPE_IMG);
-        addParams(entity.params, KEY_WX_IMG_LOCAL, imgUrl);
+        addParams(entity.params, KEY_WX_IMG_LOCAL, imgFilePath);
         return entity;
     }
 
@@ -71,7 +75,7 @@ public final class WxShareEntity extends ShareEntity {
      * @param imgRes     应用内图片资源
      * @return ShareEntity 分享内容包装
      */
-    public static ShareEntity createImageInfo(boolean isTimeLine, int imgRes) {
+    public static ShareEntity createImageInfo(boolean isTimeLine,@DrawableRes int imgRes) {
         ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
         addParams(entity.params, KEY_WX_TYPE, TYPE_IMG);
         addParams(entity.params, KEY_WX_IMG_RES, imgRes);
@@ -106,7 +110,7 @@ public final class WxShareEntity extends ShareEntity {
      * @param summary    音乐摘要
      * @return ShareEntity 分享内容包装
      */
-    public static ShareEntity createMusicInfo(boolean isTimeLine, String musicUrl, int imgRes, String title, String summary) {
+    public static ShareEntity createMusicInfo(boolean isTimeLine, String musicUrl, @DrawableRes int imgRes, String title, String summary) {
         ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
         addParams(entity.params, KEY_WX_TYPE, TYPE_MUSIC);
         addParams(entity.params, KEY_WX_MUSIC_URL, musicUrl);
@@ -142,7 +146,7 @@ public final class WxShareEntity extends ShareEntity {
      * @param summary    视频摘要
      * @return ShareEntity 分享内容包装
      */
-    public static ShareEntity createVideoInfo(boolean isTimeLine, String videoUrl, int imgRes, String title, String summary) {
+    public static ShareEntity createVideoInfo(boolean isTimeLine, String videoUrl,@DrawableRes int imgRes, String title, String summary) {
         ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
         addParams(entity.params, KEY_WX_TYPE, TYPE_VIDEO);
         addParams(entity.params, KEY_WX_VIDEO_URL, videoUrl);
@@ -178,7 +182,7 @@ public final class WxShareEntity extends ShareEntity {
      * @param summary    网页摘要
      * @return ShareEntity 分享内容包装
      */
-    public static ShareEntity createWebPageInfo(boolean isTimeLine, String webUrl, int imgRes, String title, String summary) {
+    public static ShareEntity createWebPageInfo(boolean isTimeLine, String webUrl,@DrawableRes int imgRes, String title, String summary) {
         ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
         addParams(entity.params, KEY_WX_TYPE, TYPE_WEB);
         addParams(entity.params, KEY_WX_WEB_URL, webUrl);
@@ -202,13 +206,13 @@ public final class WxShareEntity extends ShareEntity {
      * @param summary 摘要
      * @param imgRes  应用内图片资源
      */
-    private static void addTitleSummaryAndThumb(Bundle params, String title, String summary, int imgRes) {
+    private static void addTitleSummaryAndThumb(Bundle params, String title, String summary,@DrawableRes int imgRes) {
         addParams(params, KEY_WX_TITLE, title);
         addParams(params, KEY_WX_SUMMARY, summary);
         addParams(params, KEY_WX_IMG_RES, imgRes);
     }
 
-    public static void createMiniApp(Bundle params, String miniAppid,String miniPath,String webpageUrl,String title, String summary, int imgRes) {
+    public static void createMiniApp(Bundle params, String miniAppid,String miniPath,String webpageUrl,String title, String summary,@DrawableRes int imgRes) {
         addParams(params, KEY_WX_TITLE, title);
         addParams(params, KEY_WX_SUMMARY, summary);
         addParams(params, KEY_WX_MINI_APPID, miniAppid);
