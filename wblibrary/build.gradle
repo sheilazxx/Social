@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'//jcent
 android {
-    compileSdkVersion 28
-
+    compileSdkVersion rootProject.ext.compile.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 28
-        versionCode 1
+        minSdkVersion  rootProject.ext.compile.minSdkVersion
+        targetSdkVersion rootProject.ext.compile.targetSdkVersion
+        versionCode rootProject.ext.compile.versionCode
         versionName rootProject.ext.publish.version
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -65,7 +64,7 @@ publish {
 dependencies {
 //    api fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.sina.weibo.sdk:core:10.10.0:openDefaultRelease@aar'
+    implementation 'com.sina.weibo.sdk:core:9.12.0:openDefaultRelease@aar'
 //    implementation (name: 'openDefault-9.12.0', ext: 'aar')
     implementation project(path: ':socialcommon')
 //    implementation 'com.mhy.social:common:1.2.0'
