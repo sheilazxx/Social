@@ -178,8 +178,7 @@ public class MainActivity extends AppCompatActivity {
 //                AliPay authApi = new AliPay(MainActivity.this, onPayListener);
 //                authApi.doPay(new AliPayContent("alipay_sdk=alipay-sdk-php-20180705&app_id=2018111362152255&biz_content=%7B%22body%22%3A%22%E5%85%85%E5%80%BC%E7%88%B1%E8%B1%86%22%2C%22subject%22%3A+%22%E5%85%85%E5%80%BC%E7%88%B1%E8%B1%86%22%2C%22out_trade_no%22%3A+%222020060211083065315693%22%2C%22timeout_express%22%3A+%2230m%22%2C%22total_amount%22%3A+%221%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%7D&charset=UTF-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fapi.alpha.woaiwangpai.com%2Fapi%2FIntegral%2FnotifyHandle&sign_type=RSA2&timestamp=2020-06-02+11%3A08%3A39&version=1.0&sign=Qt0h%2BWRrK2NcmGrFQNPLEbdVQorUoX8RKRgaru87kY69gimuZzuT4ihT73CaKvKgLc7QmtRsPZYvQ1TyuxScncr%2FDRLCiaStc7YO6srNVp41ZVCmTDrUCdMVQf5wJ5zFTASOtkRlfK2ucwPedeC2I2YKj1uIoi5w79l3iELV34tLRSyZZukf73%2Bl%2FU3Xbgk4u0hgL4wfyyhMGULXer21sK4ZzBpquBJYVelIco5uQycHlN0YZOYyXYHBGufN%2Ff%2Bb6EsVaAxwPDAbdPq9EUaC7HDvOGTEVvO90so2%2FcrXR%2Fd55kj3lM67r8Xca9gqrQyVDx07XycLwjJHjiViEL3h4Q%3D%3D"));
                 v.startAnimation(shake);
-                AliPay authApi = new AliPay(MainActivity.this, onPayListener);
-                authApi.alipayMe("fkx19000ssxku6zeqdfnc1f");
+                ShareUtil.getInstance(MainActivity.this).alipayMe("fkx19000ssxku6zeqdfnc1f");
                 //浏览器
 //                ShareUtil.getInstance(MainActivity.this).openUrl("https://qr.alipay.com/fkx19000ssxku6zeqdfnc1f");
 //                ShareUtil.getInstance(MainActivity.this).openUrl(ShareUtil.WX);
@@ -209,8 +208,7 @@ public class MainActivity extends AppCompatActivity {
                     v.startAnimation(shake);
                 } catch (JSONException ignored) {
                     ignored.printStackTrace();
-                    PayApi wxApi = new WxPay(MainActivity.this, onPayListener);
-                    wxApi.openWxScan();//打开扫一扫
+                    ShareUtil.getInstance(MainActivity.this).openWxScan();//打开扫一扫
                 }
             }
         });

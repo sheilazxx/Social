@@ -592,12 +592,12 @@ public class ShareUtil {
      * scheme=alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Fc1x05309e4ttz2v7xrwrzcd%3F_s%3Dweb-other
      * alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fwww.baidu.com%2F //使用支付宝打开指定网址
      */
-    public void alipayMe(Context context,String urlCode){
+    public void alipayMe(String urlCode){
 //        urlCode="fkx150444qjqymmownj8acb";//00c060630igcenu4bfbud2e
         if (checkAliPayInstalled()){
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2F"+urlCode+"%3F_s%3Dweb-other"));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            mActivity.startActivity(intent);
         }
     }
 
