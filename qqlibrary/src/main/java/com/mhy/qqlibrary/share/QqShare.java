@@ -1,16 +1,16 @@
 package com.mhy.qqlibrary.share;
 
-        import android.app.Activity;
-        import android.content.Intent;
-        import android.text.TextUtils;
+import android.app.Activity;
+import android.content.Intent;
+import android.text.TextUtils;
 
-        import com.mhy.qqlibrary.QqSocial;
-        import com.mhy.socialcommon.ShareApi;
-        import com.mhy.socialcommon.ShareEntity;
-        import com.mhy.socialcommon.SocialType;
-        import com.tencent.tauth.IUiListener;
-        import com.tencent.tauth.Tencent;
-        import com.tencent.tauth.UiError;
+import com.mhy.qqlibrary.QqSocial;
+import com.mhy.socialcommon.ShareApi;
+import com.mhy.socialcommon.ShareEntity;
+import com.mhy.socialcommon.SocialType;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 
 /**
  * @author mahongyin 2020-05-29 19:32 @CopyRight mhy.work@qq.com

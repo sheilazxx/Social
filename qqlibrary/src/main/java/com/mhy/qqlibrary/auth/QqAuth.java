@@ -8,8 +8,6 @@ import android.widget.Toast;
 
 import com.mhy.qqlibrary.QqSocial;
 import com.mhy.socialcommon.AuthApi;
-import com.mhy.socialcommon.ShareApi;
-import com.mhy.socialcommon.ShareEntity;
 import com.mhy.socialcommon.SocialType;
 import com.tencent.connect.auth.AuthAgent;
 import com.tencent.connect.common.Constants;

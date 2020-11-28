@@ -1,8 +1,8 @@
 package com.mhy.qqlibrary.bean;
 
-import com.mhy.socialcommon.annotation.ParamsRequired;
 import com.mhy.socialcommon.ShareEntity;
 import com.mhy.socialcommon.SocialType;
+import com.mhy.socialcommon.annotation.ParamsRequired;
 import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzonePublish;
 import com.tencent.connect.share.QzoneShare;

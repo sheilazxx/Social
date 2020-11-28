@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat;
 
 import com.mhy.alilibrary.auth.AliAuth;
 import com.mhy.alilibrary.bean.AuthResult;
-import com.mhy.alilibrary.pay.AliPay;
 import com.mhy.qqlibrary.auth.QqAuth;
 import com.mhy.qqlibrary.bean.QQShareEntity;
 import com.mhy.qqlibrary.share.QqShare;
