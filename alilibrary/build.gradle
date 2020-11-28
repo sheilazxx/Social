@@ -83,5 +83,5 @@ dependencies {
     implementation project(path: ':socialcommon')
 //    implementation 'com.mhy.social:common:1.2.0'
     // 支付宝 SDK AAR 包所需的配置
-    implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
+    implementation (name: 'alipaysdk-15.8.00.201112210139', ext: 'aar')
 }

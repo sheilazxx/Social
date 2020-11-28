@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import com.mhy.qqlibrary.QqSocial;
 import com.mhy.socialcommon.AuthApi;
+import com.mhy.socialcommon.ShareApi;
+import com.mhy.socialcommon.ShareEntity;
 import com.mhy.socialcommon.SocialType;
 import com.tencent.connect.auth.AuthAgent;
 import com.tencent.connect.common.Constants;
@@ -28,7 +30,7 @@ public class QqAuth extends AuthApi {
 
     public QqAuth(Activity act, OnAuthListener l) {
         super(act, l);
-        setAuthType(SocialType.QQ_Auth);
+        mAuthType= SocialType.QQ_Auth;
         if (mTencent == null) {
             mTencent = Tencent.createInstance(QqSocial.getAppId(), mActivity);//authInfo"101807669"
         }
@@ -133,7 +135,7 @@ public class QqAuth extends AuthApi {
     private boolean baseVerify(OnAuthListener callback) {
         if (TextUtils.isEmpty(QqSocial.getAppId())) {
             if (callback != null) {
-                callback.onError(getAuthType(), "appid为空");
+                callback.onError(mAuthType, "appid为空");
             }
             return true;
         }
@@ -244,6 +246,11 @@ public class QqAuth extends AuthApi {
         public void onCancel() {
 //            Toast.makeText(context, "取消登录", Toast.LENGTH_SHORT).show();
             setCancelCallBack();
+        }
+
+        @Override
+        public void onWarning(int i) {
+
         }
     }
 

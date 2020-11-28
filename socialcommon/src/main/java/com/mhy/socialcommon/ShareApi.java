@@ -9,16 +9,16 @@ import android.content.Intent;
 public abstract class ShareApi {
 
     protected Activity mActivity;
-
-    private static int mShareType;
+    //分享类型
+    protected static SocialType mShareType;
     private String mInfo;
     protected static OnShareListener mShareListener;
 
-    public ShareApi(Activity act,int t, OnShareListener l) {
+    public ShareApi(Activity act,OnShareListener l) {
         mActivity = act;
         setOnShareListener(l);
-        setShareType(t);
     }
+
     public void setInfo(String orInfo) {
         this.mInfo = orInfo;
     }
@@ -26,48 +26,52 @@ public abstract class ShareApi {
     public String getInfo() {
         return mInfo;
     }
-    protected void setShareType(int shareType){
-        mShareType = shareType;
-    }
-    protected int getShareType() {
-        return mShareType;
-    }
+
     public abstract void doShare(ShareEntity content);
 
 
     /**
      * 应用分享成功回调
+     *
      * @param requestCode requestCode
-     * @param resultCode resultCode
-     * @param data data
+     * @param resultCode  resultCode
+     * @param data        data
      */
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 
     /**
      * 设置分享回调
+     *
      * @param l l
      */
-    public void setOnShareListener(OnShareListener l){
+    public void setOnShareListener(OnShareListener l) {
         mShareListener = l;
     }
 
     /**
      * 返回分享成功
      */
-    public static void callbackShareOk(){
-        if(mShareListener != null){
+    public static void callbackShareOk() {
+        if (mShareListener != null) {
             mShareListener.onShareOk(mShareType);
         }
     }
 
     /**
      * 返回分享失败
+     *
      * @param msg 错误详情
      */
-    public static void callbackShareFail(String msg){
-        if(mShareListener != null){
+    public static void callbackShareFail(String msg) {
+        if (mShareListener != null) {
             mShareListener.onShareFail(mShareType, msg);
+        }
+    }
+
+    public static void callbackCancel() {
+        if (mShareListener != null) {
+            mShareListener.onCancel(mShareType);
         }
     }
 
@@ -79,11 +83,13 @@ public abstract class ShareApi {
         /**
          * 分享回调-成功分享
          */
-        void onShareOk(int type);
+        void onShareOk( SocialType type);
 
         /**
          * 分享回调-支付分享
          */
-        void onShareFail(int type, String msg);
+        void onShareFail( SocialType type, String msg);
+
+        void onCancel( SocialType type);
     }
 }

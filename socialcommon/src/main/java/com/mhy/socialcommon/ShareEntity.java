@@ -7,27 +7,12 @@ import java.util.ArrayList;
 
 public class ShareEntity {
 
-    /**
-     * type 值
-     * qq==0
-     * qzone==1
-     * 微信==2
-     * 朋友圈==3
-     * 微博==4
-     * 说说==5
-     */
-    public static final int TYPE_QQ = 0;
-    public static final int TYPE_Q_ZONE = 1;
-    public static final int TYPE_WX = 2;
-    public static final int TYPE_PYQ = 3;
-    public static final int TYPE_WB = 4;
-    public static final int TYPE_PUBLISH = 5;
     public Bundle params;
 
-    private int type;
+    private SocialType type;
 
 
-    public ShareEntity(int type) {
+    public ShareEntity(SocialType type) {
         this.type = type;
         this.params = new Bundle();
     }
@@ -40,7 +25,7 @@ public class ShareEntity {
         this.params = params;
     }
 
-    public int getType() {
+    public SocialType getType() {
         return type;
     }
 

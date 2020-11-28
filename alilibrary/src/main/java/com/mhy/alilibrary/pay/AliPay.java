@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 
 import com.alipay.sdk.app.PayTask;
 import com.mhy.alilibrary.bean.AliPayContent;
@@ -27,7 +26,7 @@ public class AliPay extends PayApi {
 
     public AliPay(Activity act, OnPayListener l) {
         super(act, l);
-        setPayType(SocialType.ALIPAY_Pay);
+        mPayType=SocialType.ALIPAY_Pay;
     }
 
     /**
@@ -38,16 +37,17 @@ public class AliPay extends PayApi {
     @Override
     public void doPay(PayContent payInfo) {
         if (payInfo == null) {
-            callbackPayFail("null", "orderInfo为空");
+            callbackPayFail( "orderInfo为空");
             return;
         }
+//        if (payInfo instanceof AliPayContent){
         if (payInfo.getPayType() == SocialType.ALIPAY_Pay) {
             if (TextUtils.isEmpty(((AliPayContent) payInfo).getOrderInfo())){
-                callbackPayFail("null", "orderInfo为空");
+                callbackPayFail("orderInfo为空");
             }else {
-            payV2(((AliPayContent) payInfo).getOrderInfo());}
+                payV2(((AliPayContent) payInfo).getOrderInfo());}
         } else {
-           callbackPayFail("err","类型参数错误");
+            callbackPayFail("类型参数错误");
         }
     }
 
@@ -74,7 +74,8 @@ public class AliPay extends PayApi {
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
 //                        showAlert(PayDemoActivity.this, getString(R.string.pay_failed) + payResult);
-                        callbackPayFail(resultStatus, resultInfo);
+                        callbackPayFail(resultInfo);
+                        Log.e("resultInfo", resultStatus);
                     }
                     break;
                 }

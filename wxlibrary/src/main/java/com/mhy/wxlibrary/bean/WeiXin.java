@@ -1,22 +1,24 @@
 package com.mhy.wxlibrary.bean;
 
 
+import com.mhy.socialcommon.SocialType;
+
 public class WeiXin {
-    private int type;//1:登录 2.分享 3:支付
+    private SocialType type;//1:登录 2.分享 3:支付
     private int errCode;//微信返回的错误码
     private String code;//登录成功才会有的code
 
-    public WeiXin(int type,int errCode, String code) {
+    public WeiXin(SocialType type, int errCode, String code) {
         this.type = type;
         this.errCode=errCode;
         this.code = code;
     }
 
-    public int getType() {
+    public SocialType getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(SocialType type) {
         this.type = type;
     }
 

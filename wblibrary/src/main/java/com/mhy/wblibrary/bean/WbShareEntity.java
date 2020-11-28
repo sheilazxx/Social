@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.DrawableRes;
 
 import com.mhy.socialcommon.ShareEntity;
+import com.mhy.socialcommon.SocialType;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ public class WbShareEntity extends ShareEntity {
     public static final String KEY_WB_VIDEO_URL = "key_wb_video_url";
     public static final String KEY_WB_WEB_URL = "key_wb_web_url";
 
-    private WbShareEntity(int type) {
+    private WbShareEntity(SocialType type) {
         super(type);
     }
 
@@ -41,7 +42,7 @@ public class WbShareEntity extends ShareEntity {
      * @param text 分享文本内容
      */
     public static ShareEntity createTextInfo(String text) {
-        ShareEntity entity = new ShareEntity(TYPE_WB);
+        ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_TEXT);
         addParams(entity.params, KEY_WB_TEXT, text);
         return entity;
@@ -54,7 +55,7 @@ public class WbShareEntity extends ShareEntity {
      * @param text 文本内容
      */
     public static ShareEntity createImageTextInfo(String img, String text) {
-        ShareEntity entity = new ShareEntity(TYPE_WB);
+        ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_IMG_TEXT);
         addParams(entity.params, KEY_WB_TEXT, text);
         addTitleSummaryAndThumb(entity.params, "", "", img);
@@ -66,7 +67,7 @@ public class WbShareEntity extends ShareEntity {
      * @param imgPath  本地图片绝对路径
      */
     public static ShareEntity createImageStory(String imgPath) {
-        ShareEntity entity = new ShareEntity(TYPE_WB);
+        ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_IMG_STORY);
         addParams(entity.params, KEY_WB_IMG_LOCAL, imgPath);
         return entity;
@@ -76,7 +77,7 @@ public class WbShareEntity extends ShareEntity {
      * @param videoPath  本地视频绝对路径
      */
     public static ShareEntity createVideoStory(String videoPath) {
-        ShareEntity entity = new ShareEntity(TYPE_WB);
+        ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_VIDEO_STORY);
         addParams(entity.params, KEY_WB_VIDEO_URL, videoPath);
         return entity;
@@ -89,7 +90,7 @@ public class WbShareEntity extends ShareEntity {
      * @param text 文本内容
      */
     public static ShareEntity createImageTextInfo(int img, String text) {
-        ShareEntity entity = new ShareEntity(TYPE_WB);
+        ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_IMG_TEXT);
         addParams(entity.params, KEY_WB_TEXT, text);
         addTitleSummaryAndThumb(entity.params, "", "", img);
@@ -103,7 +104,7 @@ public class WbShareEntity extends ShareEntity {
      * @param text   文本内容
      */
     public static ShareEntity createMultiImageInfo(ArrayList<String> imagePaths, String text) {
-        ShareEntity entity = new ShareEntity(TYPE_WB);
+        ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_MULTI_IMAGES);
         addParams(entity.params, KEY_WB_MULTI_IMG, imagePaths);
         addParams(entity.params, KEY_WB_TEXT, text);
@@ -118,7 +119,7 @@ public class WbShareEntity extends ShareEntity {
      * @param text       文本内容
      */
     public static ShareEntity createVideoInfo(String videoUrl, String coverImage, String text) {
-        ShareEntity entity = new ShareEntity(TYPE_WB);
+        ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_VIDEO);
         addParams(entity.params, KEY_WB_VIDEO_URL, videoUrl);
         addParams(entity.params, KEY_WB_TEXT, text);
@@ -136,7 +137,7 @@ public class WbShareEntity extends ShareEntity {
      * @param text    文本内容
      */
     public static ShareEntity createWebInfo(String webUrl, String title, String summary, String img, String text) {
-        ShareEntity entity = new ShareEntity(TYPE_WB);
+        ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_WEB);
         addParams(entity.params, KEY_WB_WEB_URL, webUrl);
         addParams(entity.params, KEY_WB_TEXT, text);
@@ -154,7 +155,7 @@ public class WbShareEntity extends ShareEntity {
      * @param text    文本内容
      */
     public static ShareEntity createWebInfo(String webUrl, String title, String summary,@DrawableRes int imgRes, String text) {
-        ShareEntity entity = new ShareEntity(TYPE_WB);
+        ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_WEB);
         addParams(entity.params, KEY_WB_WEB_URL, webUrl);
         addParams(entity.params, KEY_WB_TEXT, text);

@@ -2,7 +2,6 @@ package com.mhy.wxlibrary.pay;
 
 import android.app.Activity;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.mhy.socialcommon.PayApi;
 import com.mhy.socialcommon.PayContent;
@@ -32,7 +31,7 @@ public class WxPay extends PayApi {
         super(act, l);
         mAct = act;
         setOnPayListener(l);
-        setPayType(SocialType.WEIXIN_Pay);
+        mPayType=SocialType.WEIXIN_Pay;
     }
 
     /**
@@ -45,19 +44,19 @@ public class WxPay extends PayApi {
     @Override
     public void doPay(PayContent payInfo) {
         if (payInfo == null) {
-            callbackPayFail("null", "payInfo为空");
+            callbackPayFail("payInfo为空");
             return;
         }
         final WxPayContent content;
         if (payInfo.getPayType() != SocialType.WEIXIN_Pay) {
-            callbackPayFail("err", "类型参数错误");
+            callbackPayFail( "类型参数错误");
             return;
         }else {
             content= (WxPayContent) payInfo;
         }
 
         if (TextUtils.isEmpty(content.getAppid())&&TextUtils.isEmpty(WxSocial.getWeixinId())) {
-            callbackPayFail("null", "appid为空");
+            callbackPayFail( "appid为空");
             return;
         }
 
@@ -66,7 +65,8 @@ public class WxPay extends PayApi {
         msgApi = WXAPIFactory.createWXAPI(mAct, TextUtils.isEmpty(content.getAppid())? WxSocial.getWeixinId():content.getAppid());
 
         if (!msgApi.isWXAppInstalled()) {
-            Toast.makeText(mAct, "微信未安装", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mAct, "微信未安装", Toast.LENGTH_SHORT).show();
+            callbackPayFail( "微信未安装");
             return;
         }
         new AsyncTaskEx<Void, Void, WxPayContent>() {
@@ -89,7 +89,7 @@ public class WxPay extends PayApi {
 //        msgApi.registerApp(WxSocial.getWeixinId());
                 msgApi.registerApp(TextUtils.isEmpty(result.getAppid())? WxSocial.getWeixinId() : result.getAppid());
                 if (TextUtils.isEmpty(WxSocial.getWeixinId())) {
-                    callbackPayFail("null", "appid空");
+                    callbackPayFail( "appid空");
                     return;
                 }
                 msgApi.sendReq(req);
@@ -105,7 +105,8 @@ public class WxPay extends PayApi {
         if (wxSdkVersion >= Build.OFFLINE_PAY_SDK_INT) {
             msgApi.sendReq(new JumpToOfflinePay.Req());
         } else {
-            Toast.makeText(mAct, "不支持", Toast.LENGTH_LONG).show();
+            callbackPayFail( "不支持离线支付");
+//            Toast.makeText(mAct, "不支持离线支付", Toast.LENGTH_LONG).show();
         }
     }
 }

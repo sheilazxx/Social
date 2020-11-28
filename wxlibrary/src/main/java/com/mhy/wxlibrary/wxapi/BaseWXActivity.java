@@ -49,7 +49,7 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
     public void onReq(BaseReq arg0) {
 
     }
-//1登陆，2分享
+    //1登陆，2分享
     @Override
     public void onResp(BaseResp resp) {
         if (resp.getType() == ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX) {//分享
@@ -59,7 +59,7 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
                     WxShare.callbackShareOk();
                     break;
                 case BaseResp.ErrCode.ERR_USER_CANCEL:
-                    WxShare.callbackShareFail("分享取消");
+                    WxShare.callbackCancel();;
                     break;
                 case BaseResp.ErrCode.ERR_AUTH_DENIED:
                     WxShare.callbackShareFail(resp.errStr);

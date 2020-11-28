@@ -29,15 +29,13 @@ public class WxAuth extends AuthApi {
      */
     public WxAuth(Activity act, OnAuthListener l) {
         super(act, l);
-        setAuthType(SocialType.WEIXIN_Auth);
+        mAuthType= SocialType.WEIXIN_Auth;
     }
 
     /*基本信息验证*/
     private boolean baseVerify(OnAuthListener callback) {
         if (TextUtils.isEmpty(WxSocial.getWeixinId())) {
-            if (callback != null) {
-                callback.onError(1, "appid为空");
-            }
+            setErrorCallBack("appid为空");
             return true;
         }
         return false;

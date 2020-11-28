@@ -1,12 +1,11 @@
 package com.mhy.wxlibrary.bean;
 
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
 
 import com.mhy.socialcommon.ShareEntity;
+import com.mhy.socialcommon.SocialType;
 
 
 /**
@@ -36,7 +35,7 @@ public final class WxShareEntity extends ShareEntity {
     public static final String KEY_WX_MINI_APPID = "key_wx_mini_appid";//add
     public static final String KEY_WX_MINI_PATH = "key_wx_mini_path";//add
 
-    private WxShareEntity(int type) {
+    private WxShareEntity(SocialType type) {
         super(type);
     }
 
@@ -48,7 +47,7 @@ public final class WxShareEntity extends ShareEntity {
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createTextInfo(boolean isTimeLine, String text) {
-        ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
+        ShareEntity entity = new ShareEntity(isTimeLine ? SocialType.WEIXIN_PYQ_Share : SocialType.WEIXIN_Share);
         addParams(entity.params, KEY_WX_TYPE, TYPE_TEXT);
         addParams(entity.params, KEY_WX_TEXT, text);
         return entity;
@@ -62,7 +61,7 @@ public final class WxShareEntity extends ShareEntity {
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createImageInfo(boolean isTimeLine, String imgFilePath) {
-        ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
+        ShareEntity entity = new ShareEntity(isTimeLine ? SocialType.WEIXIN_PYQ_Share : SocialType.WEIXIN_Share);
         addParams(entity.params, KEY_WX_TYPE, TYPE_IMG);
         addParams(entity.params, KEY_WX_IMG_LOCAL, imgFilePath);
         return entity;
@@ -76,7 +75,7 @@ public final class WxShareEntity extends ShareEntity {
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createImageInfo(boolean isTimeLine,@DrawableRes int imgRes) {
-        ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
+        ShareEntity entity = new ShareEntity(isTimeLine ? SocialType.WEIXIN_PYQ_Share : SocialType.WEIXIN_Share);
         addParams(entity.params, KEY_WX_TYPE, TYPE_IMG);
         addParams(entity.params, KEY_WX_IMG_RES, imgRes);
         return entity;
@@ -93,7 +92,7 @@ public final class WxShareEntity extends ShareEntity {
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createMusicInfo(boolean isTimeLine, String musicUrl, String imgUrl, String title, String summary) {
-        ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
+        ShareEntity entity = new ShareEntity(isTimeLine ? SocialType.WEIXIN_PYQ_Share : SocialType.WEIXIN_Share);
         addParams(entity.params, KEY_WX_TYPE, TYPE_MUSIC);
         addParams(entity.params, KEY_WX_MUSIC_URL, musicUrl);
         addTitleSummaryAndThumb(entity.params, title, summary, imgUrl);
@@ -111,7 +110,7 @@ public final class WxShareEntity extends ShareEntity {
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createMusicInfo(boolean isTimeLine, String musicUrl, @DrawableRes int imgRes, String title, String summary) {
-        ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
+        ShareEntity entity = new ShareEntity(isTimeLine ? SocialType.WEIXIN_PYQ_Share : SocialType.WEIXIN_Share);
         addParams(entity.params, KEY_WX_TYPE, TYPE_MUSIC);
         addParams(entity.params, KEY_WX_MUSIC_URL, musicUrl);
         addTitleSummaryAndThumb(entity.params, title, summary, imgRes);
@@ -129,7 +128,7 @@ public final class WxShareEntity extends ShareEntity {
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createVideoInfo(boolean isTimeLine, String videoUrl, String imgUrl, String title, String summary) {
-        ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
+        ShareEntity entity = new ShareEntity(isTimeLine ? SocialType.WEIXIN_PYQ_Share : SocialType.WEIXIN_Share);
         addParams(entity.params, KEY_WX_TYPE, TYPE_VIDEO);
         addParams(entity.params, KEY_WX_VIDEO_URL, videoUrl);
         addTitleSummaryAndThumb(entity.params, title, summary, imgUrl);
@@ -147,7 +146,7 @@ public final class WxShareEntity extends ShareEntity {
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createVideoInfo(boolean isTimeLine, String videoUrl,@DrawableRes int imgRes, String title, String summary) {
-        ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
+        ShareEntity entity = new ShareEntity(isTimeLine ? SocialType.WEIXIN_PYQ_Share : SocialType.WEIXIN_Share);
         addParams(entity.params, KEY_WX_TYPE, TYPE_VIDEO);
         addParams(entity.params, KEY_WX_VIDEO_URL, videoUrl);
         addTitleSummaryAndThumb(entity.params, title, summary, imgRes);
@@ -165,7 +164,7 @@ public final class WxShareEntity extends ShareEntity {
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createWebPageInfo(boolean isTimeLine, String webUrl, String imgUrl, String title, String summary) {
-        ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
+        ShareEntity entity = new ShareEntity(isTimeLine ? SocialType.WEIXIN_PYQ_Share : SocialType.WEIXIN_Share);
         addParams(entity.params, KEY_WX_TYPE, TYPE_WEB);
         addParams(entity.params, KEY_WX_WEB_URL, webUrl);
         addTitleSummaryAndThumb(entity.params, title, summary, imgUrl);
@@ -183,7 +182,7 @@ public final class WxShareEntity extends ShareEntity {
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createWebPageInfo(boolean isTimeLine, String webUrl,@DrawableRes int imgRes, String title, String summary) {
-        ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
+        ShareEntity entity = new ShareEntity(isTimeLine ? SocialType.WEIXIN_PYQ_Share : SocialType.WEIXIN_Share);
         addParams(entity.params, KEY_WX_TYPE, TYPE_WEB);
         addParams(entity.params, KEY_WX_WEB_URL, webUrl);
         addTitleSummaryAndThumb(entity.params, title, summary, imgRes);

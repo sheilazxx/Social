@@ -60,13 +60,15 @@ dependencies {
     implementation project(path: ':wblibrary')
     implementation project(path: ':qqlibrary')
     implementation project(path: ':alilibrary')
+    implementation project(path: ':alishare')
 //    implementation 'com.mhy.social:ali:1.2'
 //    implementation 'com.mhy.social:qq:1.2'
 //    implementation 'com.mhy.social:wb:1.2'
 //    implementation 'com.mhy.social:wx:1.2'
 //    implementation 'com.mhy.social:common:1.2'
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.5'
-    implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
+    implementation (name: 'alipaysdk-15.8.00.201112210139', ext: 'aar')
     implementation 'com.sina.weibo.sdk:core:10.9.0:openDefaultRelease@aar'
-    implementation files('libs/open_sdk_r8353806_lite.jar')
+//    implementation files('libs/open_sdk_r8353806_lite.jar')
+    implementation 'com.tencent.tauth:qqopensdk:3.51.1'
 }

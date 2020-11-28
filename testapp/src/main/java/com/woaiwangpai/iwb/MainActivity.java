@@ -3,6 +3,7 @@ package com.woaiwangpai.iwb;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +18,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.mhy.alilibrary.auth.AliAuth;
-import com.mhy.alilibrary.bean.AliPayContent;
 import com.mhy.alilibrary.bean.AuthResult;
 import com.mhy.alilibrary.pay.AliPay;
 import com.mhy.qqlibrary.auth.QqAuth;
@@ -25,7 +25,6 @@ import com.mhy.qqlibrary.bean.QQShareEntity;
 import com.mhy.qqlibrary.share.QqShare;
 import com.mhy.socialcommon.AuthApi;
 import com.mhy.socialcommon.PayApi;
-import com.mhy.socialcommon.PayContent;
 import com.mhy.socialcommon.ShareApi;
 import com.mhy.socialcommon.ShareEntity;
 import com.mhy.socialcommon.ShareUtil;
@@ -50,6 +49,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_share_wx).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WxShare mShareApi = new WxShare(MainActivity.this, ShareEntity.TYPE_WX, onShareListener);
+                WxShare mShareApi = new WxShare(MainActivity.this, onShareListener);
                 mShareApi.doShare(createWXShareEntity(false));
                 v.startAnimation(shake);
             }
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_share_wx_circle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WxShare mShareApi = new WxShare(MainActivity.this, ShareEntity.TYPE_PYQ, onShareListener);
+                WxShare mShareApi = new WxShare(MainActivity.this, onShareListener);
                 mShareApi.doShare(createWXShareEntity(true));
                 v.startAnimation(shake);
             }
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 v.startAnimation(shake);
-                ShareUtil shareUtil = new ShareUtil(MainActivity.this);
+                ShareUtil shareUtil =  ShareUtil.getInstance(MainActivity.this);
 //                shareUtil.shareFile(new File(getExternalFilesDir(null) + "/ccc.JPG"));
                 shareUtil.shareText("【flutter凉了吗?】知乎：… https://www.zhihu.com/question/374113031/answer/1253795562?utm_source=com.eg.android.alipaygphone&utm_medium=social&utm_oi=1020568397012209664 （分享自知乎网）");
             }
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_share_qq).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                QqShare mShareApi = new QqShare(MainActivity.this, SocialType.QQ_Share, onShareListener);
+                QqShare mShareApi = new QqShare(MainActivity.this, onShareListener);
                 mShareApi.doShare(QQShareEntity.createImageInfo(getExternalFilesDir(null) + "/aaa.png", "app"));
                 spi = mShareApi;
                 v.startAnimation(shake);
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> imgUrls = new ArrayList<>();
                 imgUrls.add(getExternalFilesDir(null) + "/aaa.png");
                 imgUrls.add(getExternalFilesDir(null) + "/bbb.jpg");
-                QqShare mShareApi = new QqShare(MainActivity.this, SocialType.QQ_ZONE_Share, onShareListener);
+                QqShare mShareApi = new QqShare(MainActivity.this, onShareListener);
                 mShareApi.doShare(QQShareEntity.createImageTextInfoToQZone("toptitle", "http://www.baidu.com", imgUrls, "summary", "我"));
                 spi = mShareApi;
                 v.startAnimation(shake);
@@ -174,11 +174,16 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_pay_alipay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //防止误支付
 //                AliPay authApi = new AliPay(MainActivity.this, onPayListener);
 //                authApi.doPay(new AliPayContent("alipay_sdk=alipay-sdk-php-20180705&app_id=2018111362152255&biz_content=%7B%22body%22%3A%22%E5%85%85%E5%80%BC%E7%88%B1%E8%B1%86%22%2C%22subject%22%3A+%22%E5%85%85%E5%80%BC%E7%88%B1%E8%B1%86%22%2C%22out_trade_no%22%3A+%222020060211083065315693%22%2C%22timeout_express%22%3A+%2230m%22%2C%22total_amount%22%3A+%221%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%7D&charset=UTF-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fapi.alpha.woaiwangpai.com%2Fapi%2FIntegral%2FnotifyHandle&sign_type=RSA2&timestamp=2020-06-02+11%3A08%3A39&version=1.0&sign=Qt0h%2BWRrK2NcmGrFQNPLEbdVQorUoX8RKRgaru87kY69gimuZzuT4ihT73CaKvKgLc7QmtRsPZYvQ1TyuxScncr%2FDRLCiaStc7YO6srNVp41ZVCmTDrUCdMVQf5wJ5zFTASOtkRlfK2ucwPedeC2I2YKj1uIoi5w79l3iELV34tLRSyZZukf73%2Bl%2FU3Xbgk4u0hgL4wfyyhMGULXer21sK4ZzBpquBJYVelIco5uQycHlN0YZOYyXYHBGufN%2Ff%2Bb6EsVaAxwPDAbdPq9EUaC7HDvOGTEVvO90so2%2FcrXR%2Fd55kj3lM67r8Xca9gqrQyVDx07XycLwjJHjiViEL3h4Q%3D%3D"));
                 v.startAnimation(shake);
                 AliPay authApi = new AliPay(MainActivity.this, onPayListener);
-                authApi.alipayMe("00c060630igcenu4bfbud2e");
+                authApi.alipayMe("fkx19000ssxku6zeqdfnc1f");
+                //浏览器
+//                ShareUtil.getInstance(MainActivity.this).openUrl("https://qr.alipay.com/fkx19000ssxku6zeqdfnc1f");
+//                ShareUtil.getInstance(MainActivity.this).openUrl("weixin://");
+
             }
         });
         //微信支付
@@ -199,10 +204,12 @@ public class MainActivity extends AppCompatActivity {
                             jsonObject.getString("timestamp"),
                             jsonObject.getString("sign"));
                     PayApi wxApi = new WxPay(MainActivity.this, onPayListener);
-                    wxApi.doPay(req);
+                    wxApi.doPay(req);//pay
                     v.startAnimation(shake);
                 } catch (JSONException ignored) {
-
+                    ignored.printStackTrace();
+                    PayApi wxApi = new WxPay(MainActivity.this, onPayListener);
+                    wxApi.openWxScan();//打开扫一扫
                 }
             }
         });
@@ -222,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_share_weibo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WbShare wbShare = new WbShare(MainActivity.this, SocialType.WEIBO_Share, onShareListener);
+                WbShare wbShare = new WbShare(MainActivity.this, onShareListener);
                 wbShare.doShareStory(WbShareEntity.createImageStory(getExternalFilesDir(null) + "/aaa.png"));
                 spi = wbShare;
                 v.startAnimation(shake);
@@ -244,7 +251,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_pay_alipay).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                WebView.setWebContentsDebuggingEnabled(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    WebView.setWebContentsDebuggingEnabled(true);
+                }
                 Intent intent = new Intent(MainActivity.this, H5PayDemoActivity.class);
                 Bundle extras = new Bundle();
 
@@ -272,15 +281,15 @@ public class MainActivity extends AppCompatActivity {
     //登陆回调
     private AuthApi.OnAuthListener onAuthListener = new AuthApi.OnAuthListener() {
         @Override
-        public void onComplete(int type, Object user) {
+        public void onComplete(SocialType type, Object user) {
             switch (type) {
-                case SocialType.ALIPAY_Auth:
+                case ALIPAY_Auth:
 //                    ali AuthResult
                     AuthResult authResult = (AuthResult) user;
                     Log.e("code交给后端和登陆绑定手机等逻辑", authResult.getAuthCode());
                     Toast.makeText(MainActivity.this, "支付宝登录成功", Toast.LENGTH_SHORT).show();
                     break;
-                case SocialType.QQ_Auth:
+                case QQ_Auth:
                     Toast.makeText(MainActivity.this, "QQ登录成功", Toast.LENGTH_SHORT).show();
                     JSONObject data = (JSONObject) user;
                     try {
@@ -291,27 +300,27 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     break;
-                case SocialType.WEIBO_Auth:
+                case WEIBO_Auth:
                     Toast.makeText(MainActivity.this, "微博登录成功", Toast.LENGTH_SHORT).show();
 //                    wb（Oauth2AccessToken）user
-                    String accessToken=((Oauth2AccessToken)user).getAccessToken();
+                    String accessToken = ((Oauth2AccessToken) user).getAccessToken();
                     break;
-                case SocialType.WEIXIN_Auth:
+                case WEIXIN_Auth:
                     Toast.makeText(MainActivity.this, "微信登录成功", Toast.LENGTH_SHORT).show();
 //                    wx((WeiXin)user).getCode()
-                    String code=((WeiXin)user).getCode();
+                    String code = ((WeiXin) user).getCode();
                     break;
             }
 
         }
 
         @Override
-        public void onError(int type, String error) {
+        public void onError(SocialType type, String error) {
             Toast.makeText(MainActivity.this, "登录失败:" + error, Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        public void onCancel(int type) {
+        public void onCancel(SocialType type) {
             Toast.makeText(MainActivity.this, "登录取消", Toast.LENGTH_SHORT).show();
         }
     };
@@ -319,25 +328,32 @@ public class MainActivity extends AppCompatActivity {
     //支付回调
     private PayApi.OnPayListener onPayListener = new PayApi.OnPayListener() {
         @Override
-        public void onPayOk() {
+        public void onPayOk(SocialType type) {
             Toast.makeText(MainActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        public void onPayFail(String code, String msg) {
+        public void onPayFail(SocialType type, String msg) {
             Toast.makeText(MainActivity.this, "支付失败：" + msg, Toast.LENGTH_SHORT).show();
         }
+
+
     };
     //分享回调
     private ShareApi.OnShareListener onShareListener = new ShareApi.OnShareListener() {
         @Override
-        public void onShareOk(int type) {
+        public void onShareOk(SocialType type) {
             Toast.makeText(MainActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        public void onShareFail(int type, String msg) {
+        public void onShareFail(SocialType type, String msg) {
             Toast.makeText(MainActivity.this, "分享失败:" + msg, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel(SocialType type) {
+
         }
     };
 

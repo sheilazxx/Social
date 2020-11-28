@@ -1,7 +1,7 @@
 package com.mhy.socialcommon;
 
-import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
+
 import androidx.annotation.DrawableRes;
 import androidx.core.content.FileProvider;
 
@@ -17,15 +18,24 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author mahongyin 2020-05-30 12:29 @CopyRight mhy.work@qq.com
  * description .
  */
 public class ShareUtil {
-    Activity mActivity;
+    Context mActivity;
+    private static ShareUtil shareUtil;
 
-    public ShareUtil(Activity act) {
+    public static ShareUtil getInstance(Context context) {
+        if (shareUtil == null) {
+            shareUtil = new ShareUtil(context);
+        }
+        return shareUtil;
+    }
+
+    private ShareUtil(Context act) {
         this.mActivity = act;
     }
 
@@ -94,6 +104,7 @@ public class ShareUtil {
         wechatIntent.putExtra(Intent.EXTRA_TEXT, msg);
         mActivity.startActivity(wechatIntent);
     }
+
     public void shareWb(String msg) {
         Intent weiboIntent = new Intent(Intent.ACTION_SEND);
         weiboIntent.setPackage("com.sina.weibo");
@@ -162,15 +173,80 @@ public class ShareUtil {
     }
 
     public void sendEmail(String title, String content, String emails) {
-        // 必须明确使用mailto前缀来修饰邮件地址,如果使用
+        // 必须明确使用mailto前缀来修饰邮件地址
         Uri uri = Uri.parse("mailto:" + emails);
-
-        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-        intent.putExtra(Intent.EXTRA_EMAIL, emails);//结果将匹配不到任何应用
-        intent.putExtra(Intent.EXTRA_CC, emails); // 抄送人
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);//不带附件
+//        intent.putExtra(Intent.EXTRA_EMAIL, emails);//接收者
+//        intent.putExtra(Intent.EXTRA_CC, emails); // 抄送人
+//        intent.putExtra(Intent.EXTRA_BCC, emails);//密送
         intent.putExtra(Intent.EXTRA_SUBJECT, title); // 主题
         intent.putExtra(Intent.EXTRA_TEXT, content); // 正文
         mActivity.startActivity(Intent.createChooser(intent, "请选择邮件类应用"));
+    }
+
+    /**
+     * 带附件
+     *
+     * @param title
+     * @param content
+     * @param emails
+     * @param filePath
+     */
+    public void sendEmailAccessory(String title, String content, String[] emails, String filePath) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_EMAIL, emails);
+//        intent.putExtra(Intent.EXTRA_CC, emails);
+//        intent.putExtra(Intent.EXTRA_BCC, emails);
+        intent.putExtra(Intent.EXTRA_TEXT, content);
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(filePath/*"file:///mnt/sdcard/a.jpg"*/));
+        intent.setType("*/*");//intent.setType("text/html");.html类型
+        intent.setType("message/rfc882");
+        Intent.createChooser(intent, "请选择邮件类应用");
+        mActivity.startActivity(intent);
+        // 必须明确使用mailto前缀来修饰邮件地址,
+//        Uri uri = Uri.parse("mailto:" + emails);
+//        Intent intent = new Intent(Intent.ACTION_SEND, uri);//带附件
+//        intent.putExtra(Intent.EXTRA_EMAIL, emails);
+//        intent.putExtra(Intent.EXTRA_CC, emails); // 抄送人
+//        intent.putExtra(Intent.EXTRA_SUBJECT, title); // 主题
+//        intent.putExtra(Intent.EXTRA_TEXT, content); // 正文
+//        mActivity.startActivity(Intent.createChooser(intent, "请选择邮件类应用"));
+    }
+
+    /**
+     * 多附件
+     *
+     * @param title
+     * @param content
+     * @param emails
+     * @param filePaths
+     */
+    public void sendEmailMultipleAccessory(String title, String content, String emails, List<String> filePaths) {
+        // 必须明确使用mailto前缀来修饰邮件地址,如果使用
+//        Uri uri = Uri.parse("mailto:" + emails);
+//        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE, uri);//带多附件
+//        intent.putExtra(Intent.EXTRA_EMAIL, emails);
+//        intent.putExtra(Intent.EXTRA_CC, emails); // 抄送人
+//        intent.putExtra(Intent.EXTRA_SUBJECT, title); // 主题
+//        intent.putExtra(Intent.EXTRA_TEXT, content); // 正文
+//        mActivity.startActivity(Intent.createChooser(intent, "请选择邮件类应用"));
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        intent.putExtra(Intent.EXTRA_EMAIL, emails);
+//        intent.putExtra(Intent.EXTRA_CC, emails);
+        intent.putExtra(Intent.EXTRA_TEXT, content);
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+
+        ArrayList<Uri> imageUris = new ArrayList<>();
+        for (String filePath : filePaths) {
+            imageUris.add(Uri.parse(filePath/*"file:///mnt/sdcard/a.jpg"*/));
+        }
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+        intent.setType("*/*");
+        intent.setType("message/rfc882");
+        Intent.createChooser(intent, "请选择邮件类应用");
+        mActivity.startActivity(intent);
     }
 
     /**
@@ -210,4 +286,120 @@ public class ShareUtil {
         return file.getPath();
     }
 
+    public void openBrowser(String url) {
+        Uri myBlogUri = Uri.parse(url);
+        mActivity.startActivity(new Intent(Intent.ACTION_VIEW, myBlogUri));
+    }
+
+    public void openMap(String j, String w) {
+        Uri mapUri = Uri.parse("geo:" + j + "，" + w);
+        mActivity.startActivity(new Intent(Intent.ACTION_VIEW, mapUri));
+    }
+
+    public void toCall(String phone) {
+        Uri telUri = Uri.parse("tel:" + phone);
+        mActivity.startActivity(new Intent(Intent.ACTION_DIAL, telUri));
+    }
+
+    public void doCall(String phone) {
+        Uri callUri = Uri.parse("tel:" + phone);
+        mActivity.startActivity(new Intent(Intent.ACTION_CALL, callUri));
+    }
+
+    public void unInstanll(String packname) {
+        Uri uninstallUri = Uri.fromParts("package", packname, null);
+        mActivity.startActivity(new Intent(Intent.ACTION_DELETE, uninstallUri));
+    }
+
+    public void instanll(String packname) {
+        Uri installUri = Uri.fromParts("package", packname, null);
+        mActivity.startActivity(new Intent(Intent.ACTION_PACKAGE_ADDED, installUri));
+    }
+
+    public void play(String path) {
+        Uri playUri = Uri.parse(path/*"file:///sdcard/download/everything.mp3"*/);
+        mActivity.startActivity(new Intent(Intent.ACTION_VIEW, playUri));
+    }
+
+    public void toSendSMS(String phone, String msg) {
+        Uri smsUri = Uri.parse("tel:" + phone);
+        Intent intent = new Intent(Intent.ACTION_VIEW, smsUri);
+        mActivity.startActivity(intent);
+        intent.putExtra("sms_body", "yyyy");
+        intent.setType("vnd.android-dir/mms-sms");
+    }
+
+    public void doSendSMS(String phone, String msg) {
+        Uri smsToUri = Uri.parse("smsto://" + phone);
+        Intent intent = new Intent(Intent.ACTION_SENDTO, smsToUri);
+        intent.putExtra("sms_body", msg);
+        mActivity.startActivity(intent);
+    }
+
+    public void toSendColorSMS(String mediaPath, String phone, String msg) {
+        Uri mmsUri = Uri.parse(mediaPath/*"content://media/external/images/media/23"*/);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra("sms_body", msg);
+        intent.putExtra(Intent.EXTRA_STREAM, mmsUri);
+        intent.setType("*/*");
+        mActivity.startActivity(intent);
+    }
+ /*利用URL Scheme
+
+   比如在自带浏览器里面输入
+   "javascript:window.location.href=’alipays://platformapi/startapp?appId=20000056’;"
+   即可直接打开支付宝的二维码付款页面。自己手动添加浏览器书签然后丢到桌面就行了。
+   支付宝扫码
+   alipayqr://platformapi/startapp?saId=10000007
+   支付宝付款
+   alipays://platformapi/startapp?appId=20000056
+   支付宝红包入口
+   alipay://platformapi/startapp?saId=88886666
+
+   下面是微信的
+   ”weixin://dl/groupchat“发起群聊
+   ”weixin://dl/add“添加朋友
+   ”weixin://dl/log“上报日志
+   ”weixin://dl/recommendation“新的朋友
+   ”weixin://dl/groups“群聊
+   ”weixin://dl/tags“标签
+   ”weixin://dl/officialaccounts“公众号
+   ”weixin://dl/moments“朋友圈
+   ”weixin://dl/scan“扫一扫
+   ”weixin://dl/shopping“购物
+   ”weixin://dl/games“游戏
+   ”weixin://dl/profile“个人信息
+   ”weixin://dl/setname“名字
+   ”weixin://dl/myQRcode“我的二维码
+   ”weixin://dl/myaddress“我的地址
+   ”weixin://dl/posts“相册
+   ”weixin://dl/favorites“收藏
+   ”weixin://dl/card“优惠券
+   ”weixin://dl/stickers“表情
+   ”weixin://dl/settings“设置
+   ”weixin://dl/bindqq“QQ 号
+   ”weixin://dl/bindmobile“手机号
+   ”weixin://dl/bindemail“邮箱地址
+   ”weixin://dl/protection“帐号保护
+   ”weixin://dl/notifications“新消息通知
+   ”weixin://dl/blacklist“通讯录黑名单
+   ”weixin://dl/hidemoments“不让他（她）看我的朋友圈
+   ”weixin://dl/blockmoments“不看他（她）的朋友圈
+   ”weixin://dl/general“通用
+   ”weixin://dl/languages“多语言
+   ”weixin://dl/textsize“字体大小
+   ”weixin://dl/stickersetting“我的表情
+   ”weixin://dl/sight“朋友圈小视频
+   ”weixin://dl/features“功能
+   ”weixin://dl/securityassistant“通讯录同步助手
+   ”weixin://dl/broadcastmessage“群发助手
+   ”weixin://dl/chathistory“聊天记录迁移
+   ”weixin://dl/clear“清理微信存储空间
+   ”weixin://dl/help“意见反馈
+   ”weixin://dl/about“关于微信
+*/
+    public void openUrl(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        mActivity.startActivity(intent);
+    }
 }

@@ -4,6 +4,7 @@ package com.mhy.wxlibrary.wxapi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.mhy.wxlibrary.WxSocial;
 import com.mhy.wxlibrary.pay.WxPay;
@@ -21,21 +22,21 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
 
 	private static final String TAG = "WXPayBaseEntryActivity";
 
-    private IWXAPI api;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	private IWXAPI api;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-    	api = WXAPIFactory.createWXAPI(this, WxSocial.getWeixinId());
+		api = WXAPIFactory.createWXAPI(this, WxSocial.getWeixinId());
 //		api.registerApp(Social.getWeixinId());//add
-        api.handleIntent(getIntent(), this);
-    }
+		api.handleIntent(getIntent(), this);
+	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		setIntent(intent);
-        api.handleIntent(intent, this);
+		api.handleIntent(intent, this);
 	}
 
 	@Override
@@ -50,10 +51,11 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
 			if(resp.errCode == BaseResp.ErrCode.ERR_OK){
 				WxPay.callbackPayOk();
 			}else{
-				WxPay.callbackPayFail(String.valueOf(resp.errCode), resp.errStr);
+				WxPay.callbackPayFail(resp.errStr);
+				Log.i("payfailcode:",String.valueOf(resp.errCode));
 			}
 		}
 
-        finish();
+		finish();
 	}
 }

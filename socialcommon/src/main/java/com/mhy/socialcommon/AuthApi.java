@@ -10,7 +10,7 @@ public abstract class AuthApi {
 
     protected Activity mActivity;
 
-    private static int mAuthType;
+    protected static SocialType mAuthType;
 
     protected static OnAuthListener mOnAuthListener;
 
@@ -19,31 +19,11 @@ public abstract class AuthApi {
         setAuthListener(l);
     }
 
-
-    /**
-     * 设置社会化类型
-     *
-     * @param authType type
-     */
-    protected void setAuthType(int authType) {
-        mAuthType = authType;
-    }
-
-    /**
-     * 获取社会化类型
-     *
-     * @return 类型 {@link SocialType}
-     */
-    protected int getAuthType() {
-        return mAuthType;
-    }
-
-
 //    public abstract void doAuth(String mInfo);
 
-/**
- * qq weibo 需要
- */
+    /**
+     * qq weibo 需要
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        switch (getAuthType()) {
 ////            case AuthType.QQ:
@@ -109,7 +89,7 @@ public abstract class AuthApi {
          * @param type 登陆类型
          * @param user 返回实体
          */
-        void onComplete(int type, Object user);
+        void onComplete(SocialType type, Object user);
 
         /**
          * 失败
@@ -117,13 +97,13 @@ public abstract class AuthApi {
          * @param type  登陆类型
          * @param error 失败原因
          */
-        void onError(int type, String error);
+        void onError(SocialType type, String error);
 
         /**
          * 用户取消
          *
          * @param type 登陆类型
          */
-        void onCancel(int type);
+        void onCancel( SocialType type);
     }
 }

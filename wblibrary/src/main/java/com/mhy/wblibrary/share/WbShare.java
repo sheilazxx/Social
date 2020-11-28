@@ -9,10 +9,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+
 import com.mhy.socialcommon.ShareApi;
 import com.mhy.socialcommon.ShareEntity;
+import com.mhy.socialcommon.SocialType;
 import com.mhy.wblibrary.WbSocial;
 import com.mhy.wblibrary.bean.WbShareEntity;
 import com.sina.weibo.sdk.api.ImageObject;
@@ -35,25 +38,27 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/** 分享平台公共组件模块-微博分享 */
+/**
+ * 分享平台公共组件模块-微博分享
+ */
 public class WbShare extends ShareApi {
   private IWBAPI mWBAPI;
+
   /**
    * 执行登陆操作
    *
    * @param act activity
-   * @param l 回调监听
+   * @param l   回调监听
    */
-  public WbShare(Activity act, int t, OnShareListener l) {
-    super(act, t, l);
-    //        setShareType(t/*SocialType.WEIBO_Share*/);
+  public WbShare(Activity act, OnShareListener l) {
+    super(act, l);
+    mShareType = SocialType.WEIBO_Share;
     mActivity = act;
     setOnShareListener(l);
     if (cpuX86()) {
       return;
     }
-    AuthInfo authInfo =
-        new AuthInfo(act, WbSocial.getAppKy(), WbSocial.getRedirectUrl(), WbSocial.getScope());
+    AuthInfo authInfo = new AuthInfo(act, WbSocial.getAppKy(), WbSocial.getRedirectUrl(), WbSocial.getScope());
     mWBAPI = WBAPIFactory.createWBAPI(act);
     mWBAPI.registerApp(act, authInfo);
     // mWBAPI.setLoggerEnable(true);
@@ -75,35 +80,33 @@ public class WbShare extends ShareApi {
   public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
     mWBAPI.doResultIntent(
-        data,
-        new WbShareCallback() {
-          @Override
-          public void onComplete() {
-            callbackShareOk();
-            //                Toast.makeText(ShareActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
-          }
+            data,
+            new WbShareCallback() {
+              @Override
+              public void onComplete() {
+                callbackShareOk();
+                //                Toast.makeText(ShareActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
+              }
 
-          @Override
-          public void onError(UiError error) {
-            callbackShareFail(error.errorMessage);
-            //                Toast.makeText(ShareActivity.this, "分享失败:" + error.errorMessage,
-            // Toast.LENGTH_SHORT).show();
-          }
+              @Override
+              public void onError(UiError error) {
+                callbackShareFail(error.errorMessage);
+                //                Toast.makeText(ShareActivity.this, "分享失败:" + error.errorMessage,
+                // Toast.LENGTH_SHORT).show();
+              }
 
-          @Override
-          public void onCancel() {
-            callbackShareFail("分享取消");
-            //                Toast.makeText(ShareActivity.this, "分享取消", Toast.LENGTH_SHORT).show();
-          }
-        });
+              @Override
+              public void onCancel() {
+                callbackCancel();
+                //                Toast.makeText(ShareActivity.this, "分享取消", Toast.LENGTH_SHORT).show();
+              }
+            });
   }
 
   /*基本信息验证*/
-  private boolean baseVerify(OnShareListener callback) {
+  private boolean baseVerify() {
     if (TextUtils.isEmpty(WbSocial.getAppKy()) || TextUtils.isEmpty(WbSocial.getRedirectUrl())) {
-      if (callback != null) {
-        callback.onShareFail(getShareType(), "请检查appid是否为空");
-      }
+      callbackShareFail("请检查appid是否为空");
       return true;
     }
     return false;
@@ -119,7 +122,7 @@ public class WbShare extends ShareApi {
     if (cpuX86()) {
       return;
     }
-    if (baseVerify(mShareListener)) {
+    if (baseVerify()) {
       return;
     }
 
@@ -139,7 +142,7 @@ public class WbShare extends ShareApi {
     if (cpuX86()) {
       return;
     }
-    if (baseVerify(mShareListener)) {
+    if (baseVerify()) {
       return;
     }
     StoryMessage message = getShareStoryMessage(shareEntity.getParams());
@@ -346,6 +349,7 @@ public class WbShare extends ShareApi {
     }
     return imgObj;
   }
+
   /**
    * 以最省内存的方式读取本地资源的图片
    *
@@ -362,8 +366,10 @@ public class WbShare extends ShareApi {
     InputStream is = context.getResources().openRawResource(resId);
     return BitmapFactory.decodeStream(is, null, opt);
   }
+
   /**
    * 多图
+   *
    * @param params
    * @return
    */
@@ -415,7 +421,9 @@ public class WbShare extends ShareApi {
     }
     return videoSourceObject;
   }
+
   private String defautText = "分享网页";
+
   private WebpageObject getWebPageObj(Bundle params) {
     WebpageObject webpageObject = new WebpageObject();
     webpageObject.identify = UUID.randomUUID().toString();
@@ -430,7 +438,7 @@ public class WbShare extends ShareApi {
 
   /**
    * 当有设置缩略图但是找不到的时候阻止分享
-   * */
+   */
   private boolean addTitleSummaryAndThumb(MediaObject msg, Bundle params) {
     if (params.containsKey(WbShareEntity.KEY_WB_TITLE)) {
       msg.title = params.getString(WbShareEntity.KEY_WB_TITLE);
@@ -450,17 +458,18 @@ public class WbShare extends ShareApi {
         bitmap = BitmapFactory.decodeFile(imgUrl);
       } else {
         try {
-           bitmap = BitmapFactory.decodeResource(mActivity.getResources(), params.getInt(WbShareEntity.KEY_WB_IMG_RES));
+          bitmap = BitmapFactory.decodeResource(mActivity.getResources(), params.getInt(WbShareEntity.KEY_WB_IMG_RES));
         } catch (Exception e) {
           e.printStackTrace();
-           bitmap = readBitMap(mActivity, params.getInt(WbShareEntity.KEY_WB_IMG_RES));
+          bitmap = readBitMap(mActivity, params.getInt(WbShareEntity.KEY_WB_IMG_RES));
         }
       }
       msg.thumbData = bmpToByteArray(bitmap, true);
     }
     return false;
   }
-//搞缩略图
+
+  //搞缩略图
   private byte[] bmpToByteArray(final Bitmap bmp, boolean needThumb) {
 //      if (null != bitmap) {
 //        ByteArrayOutputStream os = null;

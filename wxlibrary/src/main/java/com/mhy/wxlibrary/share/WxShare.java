@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.mhy.socialcommon.ShareApi;
 import com.mhy.socialcommon.ShareEntity;
+import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.WxSocial;
 import com.mhy.wxlibrary.bean.WxShareEntity;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
@@ -35,21 +36,19 @@ public class WxShare extends ShareApi {
      * 执行登陆操作
      *
      * @param act activity
-     * @param t   分享类型
      * @param l   回调监听
      */
-    public WxShare(Activity act, int t,OnShareListener l) {
-        super(act,t,l);
+    public WxShare(Activity act, OnShareListener l) {
+        super(act, l);
         mActivity = act;
         setOnShareListener(l);
-//        setShareType(t);
     }
+
     /*基本信息验证*/
-    private boolean baseVerify(OnShareListener callback) {
+    private boolean baseVerify() {
         if (TextUtils.isEmpty(WxSocial.getWeixinId())) {
-            if (callback != null) {
-                callback.onShareFail(1,"appid为空");
-            }
+            callbackShareFail( "appid为空");
+
             return true;
         }
         return false;
@@ -57,11 +56,14 @@ public class WxShare extends ShareApi {
 
     /**
      * 分享
+     *
      * @param mShareContent 分享内容包装
      */
     @Override
     public void doShare(ShareEntity mShareContent) {
-        if (baseVerify(mShareListener)){
+        if (null==mShareContent){return;}
+        mShareType= mShareContent.getType();
+        if (baseVerify()) {
             return;
         }
         IWXAPI api = WXAPIFactory.createWXAPI(mActivity, WxSocial.getWeixinId(), true);
@@ -72,11 +74,9 @@ public class WxShare extends ShareApi {
             return;
         }
         //是否分享到朋友圈，微信4.2以下不支持朋友圈
-        boolean isTimeLine = mShareContent.getType() == ShareEntity.TYPE_PYQ;
+        boolean isTimeLine = mShareContent.getType() == SocialType.WEIXIN_PYQ_Share;
         if (isTimeLine && api.getWXAppSupportAPI() < 0x21020001) {
-            if (mShareListener != null) {
-                mShareListener.onShareFail(1, "微信版本过低，不支持分享朋友圈");
-            }
+            callbackShareFail( "微信版本过低，不支持分享朋友圈");
             return;
         }
 
@@ -94,7 +94,7 @@ public class WxShare extends ShareApi {
         return type == null ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
-    private  byte[] bmpToByteArray(final Bitmap bmp, boolean needThumb) {
+    private byte[] bmpToByteArray(final Bitmap bmp, boolean needThumb) {
         Bitmap newBmp;
         if (needThumb) {
             int width = bmp.getWidth();
@@ -162,6 +162,7 @@ public class WxShare extends ShareApi {
 
     /**
      * 分享小程序 卡片 目前不支持朋友圈
+     *
      * @param req
      * @param message
      * @param params
@@ -169,16 +170,16 @@ public class WxShare extends ShareApi {
      */
     private boolean addMiniApp(SendMessageToWX.Req req, WXMediaMessage message, Bundle params) {
         //    第二种：App 主动分享小程序卡片：⚠️ 小程序测试版不能分享
-        WXMiniProgramObject wxminiObiect =new WXMiniProgramObject();
-        wxminiObiect.webpageUrl =  params.getString(WxShareEntity.KEY_WX_WEB_URL); //兼容低版本的网络链接
-        wxminiObiect.userName =  params.getString(WxShareEntity.KEY_WX_MINI_APPID);//小程序的原始ID
+        WXMiniProgramObject wxminiObiect = new WXMiniProgramObject();
+        wxminiObiect.webpageUrl = params.getString(WxShareEntity.KEY_WX_WEB_URL); //兼容低版本的网络链接
+        wxminiObiect.userName = params.getString(WxShareEntity.KEY_WX_MINI_APPID);//小程序的原始ID
         wxminiObiect.path = params.getString(WxShareEntity.KEY_WX_MINI_PATH);// 指定打开小程序的某一个页面的URL路径
 //    wxminiObiect.hdImageData =  hdImageData; //小程序节点高清大图，小于128K
 
         message.title = params.getString(WxShareEntity.KEY_WX_TITLE);
         message.description = params.getString(WxShareEntity.KEY_WX_SUMMARY);
 
-        Bitmap bitmap=null;
+        Bitmap bitmap = null;
         if (params.containsKey(WxShareEntity.KEY_WX_IMG_LOCAL)) {
             //分为本地文件
             String imgUrl = params.getString(WxShareEntity.KEY_WX_IMG_LOCAL);
@@ -188,10 +189,10 @@ public class WxShare extends ShareApi {
             bitmap = BitmapFactory.decodeFile(imgUrl);
         } else {
             //应用内资源图片
-            bitmap = BitmapFactory.decodeResource(mActivity.getResources(),params.getInt(WxShareEntity.KEY_WX_IMG_RES));
+            bitmap = BitmapFactory.decodeResource(mActivity.getResources(), params.getInt(WxShareEntity.KEY_WX_IMG_RES));
         }
         message.mediaObject = wxminiObiect;
-        if(bitmap!=null){// 兼容旧版本节点的图片，小于32k，新版本优先
+        if (bitmap != null) {// 兼容旧版本节点的图片，小于32k，新版本优先
             message.thumbData = bmpToByteArray(bitmap, true);
         }
 //        req.transaction = buildTransaction("miniprogram");
@@ -228,7 +229,7 @@ public class WxShare extends ShareApi {
             imgObj = new WXImageObject(bitmap);
         }
         msg.mediaObject = imgObj;
-        if(bitmap!=null){
+        if (bitmap != null) {
             msg.thumbData = bmpToByteArray(bitmap, true);
         }
         req.transaction = buildTransaction("img");
@@ -302,7 +303,7 @@ public class WxShare extends ShareApi {
             File file = new File(filePath);
             if (!file.exists()) {
                 if (mShareListener != null) {
-                    callbackShareFail( "文件未找到");
+                    callbackShareFail("文件未找到");
                 }
                 return true;
             }

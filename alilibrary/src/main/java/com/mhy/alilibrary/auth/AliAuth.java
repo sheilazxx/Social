@@ -22,7 +22,7 @@ import static com.mhy.alilibrary.AliSoial.SDK_AUTH_FLAG;
 public class AliAuth extends AuthApi {
     public AliAuth(Activity act, OnAuthListener l) {
         super(act, l);
-        setAuthType(SocialType.ALIPAY_Auth);
+        mAuthType= SocialType.ALIPAY_Auth;
     }
 
 

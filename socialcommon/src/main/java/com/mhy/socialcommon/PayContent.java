@@ -9,13 +9,13 @@ public abstract class PayContent {
      * @see SocialType
      * @return SocialType
      */
-    public int getPayType() {
+    public SocialType getPayType() {
         return payType;
     }
 
-    public void setPayType(int payType) {
+    public void setPayType(SocialType payType) {
         this.payType = payType;
     }
 
-    protected int payType;
+    protected SocialType payType;
 }
