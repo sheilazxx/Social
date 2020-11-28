@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.service.quicksettings.TileService;
 import android.widget.Toast;
 
@@ -356,15 +357,16 @@ public class ShareUtil {
     }
 
 
-    public static final String AliPay_Barcode="alipayqr://platformapi/startapp?saId=20000056";//付款码
-    public static final String AliPay_Paycode="alipayqr://platformapi/startapp?saId=20000123";//收款码
-    public static final String AliPay_Hongbao="alipay://platformapi/startapp?saId=88886666";//红包
-    public static final String AliPay_Scan="alipayqr://platformapi/startapp?saId=10000007";//扫码
-    public static final String AliPay_Qr="&qrcode=https%3a%2f%2fqr.alipay.com%2f";//扫码字段
-    public static final String AliPay_Qr_Me="&qrcode=https%3a%2f%2fqr.alipay.com%2ffkx19000ssxku6zeqdfnc1f";
-    public static final String WX_Scan="weixin://scanqrcode";
-    public static final String WX="weixin://";
-    public static final String AliPay="alipays://platformapi/startApp";
+    public static final String AliPay_Barcode = "alipayqr://platformapi/startapp?saId=20000056";//付款码
+    public static final String AliPay_Paycode = "alipayqr://platformapi/startapp?saId=20000123";//收款码
+    public static final String AliPay_Hongbao = "alipay://platformapi/startapp?saId=88886666";//红包
+    public static final String AliPay_Scan = "alipayqr://platformapi/startapp?saId=10000007";//扫码
+    public static final String AliPay_Qr = "&qrcode=https%3a%2f%2fqr.alipay.com%2f";//扫码字段
+    public static final String AliPay_Qr_Me = "&qrcode=https%3a%2f%2fqr.alipay.com%2ffkx19000ssxku6zeqdfnc1f";
+    public static final String WX_Scan = "weixin://scanqrcode";
+    public static final String WX = "weixin://";
+    public static final String AliPay = "alipays://platformapi/startApp";
+
     /*利用URL Scheme
 
       比如在自带浏览器里面输入
@@ -485,26 +487,74 @@ public class ShareUtil {
       ”weixin://dl/help“意见反馈
       ”weixin://dl/about“关于微信
    */
-    public void openUrl(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        mActivity.startActivity(intent);
+    public boolean openUrl(String url) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startIntent(intent);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
-    public void openActivity(Context context,String packname,String className){
+
+    /**
+     * 启动主页
+     * @param packname
+     * @param className
+     * @param bundle
+     */
+    public void openOutMain(String packname, String className, Bundle bundle) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         ComponentName cmp = new ComponentName(packname, className);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
         intent.setComponent(cmp);
-        context.startActivity(intent);
+        startIntent(intent);
+    }
+
+    /**
+     * Intent.ACTION_VIEW 非主页
+     * @param className
+     * @param bundle
+     * @param flag
+     */
+    public void openOutActivity(String packname, String className, Bundle bundle, int flag) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        ComponentName cmp = new ComponentName(packname, className);
+        intent.addFlags(flag);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        intent.setComponent(cmp);
+        startIntent(intent);
+    }
+
+    private void startIntent(Intent intent) {
+        if (isActivityAvailable(intent)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (mActivity instanceof TileService) {
+                    ((TileService) mActivity).startActivityAndCollapse(intent);
+                } else {
+                    mActivity.startActivity(intent);
+                }
+            } else {
+                mActivity.startActivity(intent);
+            }
+        }
     }
 
     /**
      * 是否安装某APP
+     *
      * @param pack 包名  "com.eg.android.AlipayGphone"
      * @return true 已安装
      */
-    protected boolean hasInstall(Context context,String pack) {
-        PackageManager pm = context.getPackageManager();
+    protected boolean hasInstall(String pack) {
+        PackageManager pm = mActivity.getPackageManager();
         try {
             PackageInfo info = pm.getPackageInfo(pack, 0);
             return info != null;
@@ -516,11 +566,12 @@ public class ShareUtil {
 
     /**
      * intent是否可达
+     *
      * @param intent intent.putE等
      * @return true ok
      */
-    protected boolean isActivityAvailable(Context context,Intent intent) {
-        PackageManager pm = context.getPackageManager();
+    protected boolean isActivityAvailable(Intent intent) {
+        PackageManager pm = mActivity.getPackageManager();
         if (pm == null) {
             return false;
         }
@@ -531,149 +582,72 @@ public class ShareUtil {
     /**
      * 打开weixin扫一扫界面 如需收款，请自行操作保存收款码到相册步骤
      */
-    public  void openWxScan() {
-        Intent intent = new Intent();
-        intent.setComponent(new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI"));
-        intent.putExtra("LauncherUI.From.Scaner.Shortcut", true);
-//        intent.setFlags(335544320);==> 2进制 1400 0000  or运算
-        intent.setFlags( FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP );
-//        或者
-//        intent.setFlags( FLAG_RECEIVER_FOREGROUND | FLAG_ACTIVITY_CLEAR_TOP );
-        intent.setAction("android.intent.action.VIEW");
-        if (checkWxInstalled()) {
-            mActivity.startActivity(intent);
-        } else {
-            Toast.makeText(mActivity, "未安装微信", Toast.LENGTH_SHORT).show();
-        }
-    }
-    public void openWX(){
-        try {
-            Intent intent = new Intent("android.intent.action.MAIN");//android.intent.action.MAIN
-//            intent.addFlags(270532608);//hex 1020 0000
-            intent.addFlags(FLAG_ACTIVITY_NEW_TASK|FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-            intent.addCategory("android.intent.category.LAUNCHER");
-            intent.setComponent(new ComponentName("com.tencent.mm","com.tencent.mm.plugin.offline.ui.WalletOfflineCoinPurseUI"));
-            mActivity.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void openWx (Context context){
-        try {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
-            intent.putExtra("LauncherUI.From.Scaner.Shortcut", true);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setComponent(cmp);
-            context.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void openwx (Context context){
-        try {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setComponent(cmp);
-            context.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void openWxScan() {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("LauncherUI.From.Scaner.Shortcut", true);
+        openOutActivity("com.tencent.mm", "com.tencent.mm.ui.LauncherUI", bundle,FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
 
+//        Intent intent = new Intent();
+//        intent.setComponent(new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI"));
+//        intent.putExtra("LauncherUI.From.Scaner.Shortcut", true);
+////        intent.setFlags(335544320);==> 2进制 1400 0000  or运算
+//        intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+////        或者
+////        intent.setFlags( FLAG_RECEIVER_FOREGROUND | FLAG_ACTIVITY_CLEAR_TOP );
+//        intent.setAction(Intent.ACTION_VIEW);
+//        if (checkWxInstalled()) {
+//            mActivity.startActivity(intent);
+//        } else {
+//            Toast.makeText(mActivity, "未安装微信", Toast.LENGTH_SHORT).show();
+//        }
+    }
+
+    public void openWX() {
+        try {
+            Intent intent = new Intent(Intent.ACTION_MAIN);//android.intent.action.MAIN
+//            intent.addFlags(270532608);//hex 1020 0000
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            intent.setComponent(new ComponentName("com.tencent.mm", "com.tencent.mm.plugin.offline.ui.WalletOfflineCoinPurseUI"));
+            mActivity.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    public void openwx(Context context) {
+        openOutMain("com.tencent.mm", "com.tencent.mm.ui.LauncherUI", null);
+//   openUrl(WX);
     }
 
     /**
-     * 支付宝个人 捐赠
+     * 支付宝个人 捐赠 扫码支付
+     *
      * @param urlCode 收款码 /末尾
      *
-     * scheme=alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Fc1x05309e4ttz2v7xrwrzcd%3F_s%3Dweb-other
-     * alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fwww.baidu.com%2F //使用支付宝打开指定网址
+     *                scheme=alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Fc1x05309e4ttz2v7xrwrzcd%3F_s%3Dweb-other
+     *                alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fwww.baidu.com%2F //使用支付宝打开指定网址
      */
-    public void alipayMe(String urlCode){
+    public void alipayMe(String urlCode) {
 //        urlCode="fkx150444qjqymmownj8acb";//00c060630igcenu4bfbud2e
-        if (checkAliPayInstalled()){
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2F"+urlCode+"%3F_s%3Dweb-other"));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mActivity.startActivity(intent);
-        }
+//        openUrl(AliPay_Scan + "&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2F" + urlCode + "%3F_s%3Dweb-other");
+        openUrl(AliPay_Scan+AliPay_Qr + urlCode);
     }
 
     //判断是否安装支付宝app
-    public  boolean checkAliPayInstalled() {
+    public boolean checkAliPayInstalled() {
         Uri uri = Uri.parse(ShareUtil.AliPay);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         ComponentName componentName = intent.resolveActivity(mActivity.getPackageManager());
         return componentName != null;
     }
-    public  boolean checkWxInstalled() {
+
+    public boolean checkWxInstalled() {
         Uri uri = Uri.parse(ShareUtil.WX);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         ComponentName componentName = intent.resolveActivity(mActivity.getPackageManager());
         return componentName != null;
     }
-    /**
-     * 打开支付宝扫一扫界面
-     *
-     * @return 是否成功打开 Activity
-     */
-    public  boolean openAlipayScan(String code) {
-        try {
-            Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//            if (context instanceof TileService) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                if (mActivity instanceof TileService) {
-                    ((TileService) mActivity).startActivityAndCollapse(intent);
-                }
-            } else {
-                mActivity.startActivity(intent);
-            }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    public  boolean openAlipayHongbao() {
-        try {
-            Uri uri = Uri.parse("alipay://platformapi/startapp?saId=88886666");
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//            if (context instanceof TileService) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                if (mActivity instanceof TileService) {
-                    ((TileService) mActivity).startActivityAndCollapse(intent);
-                }
-            } else {
-                mActivity.startActivity(intent);
-            }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
-    /**
-     * 打开支付宝付款码
-     * @return 是否成功打开 Activity
-     */
-    public boolean  openAlipayBarcode() {
-        try {
-            Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=20000056");
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//            if (context instanceof TileService) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                if (mActivity instanceof TileService) {
-                    ((TileService) mActivity).startActivityAndCollapse(intent);
-                }
-            } else {
-                mActivity.startActivity(intent);
-            }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
 }

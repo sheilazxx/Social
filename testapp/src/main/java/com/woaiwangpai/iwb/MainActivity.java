@@ -182,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
 //                ShareUtil.getInstance(MainActivity.this).openUrl("https://qr.alipay.com/fkx19000ssxku6zeqdfnc1f");
 //                ShareUtil.getInstance(MainActivity.this).openUrl(ShareUtil.WX);
 //                ShareUtil.getInstance(MainActivity.this).openUrl(ShareUtil.WX_Scan);
+//                openUrl(AliPay_Barcode);  openUrl(AliPay_Scan);
 
             }
         });
