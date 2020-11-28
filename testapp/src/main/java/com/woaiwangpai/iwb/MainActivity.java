@@ -19,6 +19,8 @@ import androidx.core.content.ContextCompat;
 
 import com.mhy.alilibrary.auth.AliAuth;
 import com.mhy.alilibrary.bean.AuthResult;
+import com.mhy.alishare.AliShare;
+import com.mhy.alishare.AliShareEntity;
 import com.mhy.qqlibrary.auth.QqAuth;
 import com.mhy.qqlibrary.bean.QQShareEntity;
 import com.mhy.qqlibrary.share.QqShare;
@@ -65,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
         return shareEntity;
     }
 
-    AuthApi api;
-    ShareApi spi;
+   private AuthApi api;
+   private ShareApi spi;
 
-    Animation shake;
+   private Animation shake;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,6 +234,17 @@ public class MainActivity extends AppCompatActivity {
                 wbShare.doShareStory(WbShareEntity.createImageStory(getExternalFilesDir(null) + "/aaa.png"));
                 spi = wbShare;
                 v.startAnimation(shake);
+            }
+        });
+        //支付宝
+        findViewById(R.id.btn_share_weibo).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AliShare aliShare = new AliShare(MainActivity.this, onShareListener);
+                aliShare.doShare(AliShareEntity.createTextInfo(getExternalFilesDir(null) + "/aaa.png"));
+                spi = aliShare;
+                v.startAnimation(shake);
+                return true;
             }
         });
         //微博登录

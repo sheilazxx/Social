@@ -602,20 +602,7 @@ public class ShareUtil {
 //        }
     }
 
-    public void openWX() {
-        try {
-            Intent intent = new Intent(Intent.ACTION_MAIN);//android.intent.action.MAIN
-//            intent.addFlags(270532608);//hex 1020 0000
-            intent.addFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            intent.setComponent(new ComponentName("com.tencent.mm", "com.tencent.mm.plugin.offline.ui.WalletOfflineCoinPurseUI"));
-            mActivity.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void openwx(Context context) {
+    public void openwx() {
         openOutMain("com.tencent.mm", "com.tencent.mm.ui.LauncherUI", null);
 //   openUrl(WX);
     }

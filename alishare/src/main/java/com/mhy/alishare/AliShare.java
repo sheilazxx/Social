@@ -45,7 +45,7 @@ public class AliShare extends ShareApi implements IAPAPIEventHandler {
         super(act, l);
         mShareType = SocialType.ALIPAY_Share;
         if (TextUtils.isEmpty(APP_ID)) {
-            throw new RuntimeException("APP_ID为空,请先全局setAppId()");
+            callbackShareFail("APP_ID为空,请先全局setAppId()");
         }
         api = APAPIFactory.createZFBApi(act.getApplicationContext(), APP_ID, false);
         Intent intent = act.getIntent();
