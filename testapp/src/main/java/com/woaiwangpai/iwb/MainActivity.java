@@ -182,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
                 authApi.alipayMe("fkx19000ssxku6zeqdfnc1f");
                 //浏览器
 //                ShareUtil.getInstance(MainActivity.this).openUrl("https://qr.alipay.com/fkx19000ssxku6zeqdfnc1f");
-//                ShareUtil.getInstance(MainActivity.this).openUrl("weixin://");
+//                ShareUtil.getInstance(MainActivity.this).openUrl(ShareUtil.WX);
+//                ShareUtil.getInstance(MainActivity.this).openUrl(ShareUtil.WX_Scan);
 
             }
         });
