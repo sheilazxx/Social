@@ -44,7 +44,7 @@ public class AliShare extends ShareApi implements IAPAPIEventHandler {
     public AliShare(Activity act, OnShareListener l) {
         super(act, l);
         mShareType = SocialType.ALIPAY_Share;
-        if (TextUtils.isEmpty(APP_ID)) {
+        if (TextUtils.isEmpty(getAppId())) {
             callbackShareFail("APP_ID为空,请先全局setAppId()");
         }
         api = APAPIFactory.createZFBApi(act.getApplicationContext(), APP_ID, false);
@@ -134,7 +134,6 @@ public class AliShare extends ShareApi implements IAPAPIEventHandler {
                 //构造一个Req
                 SendMessageToZFB.Req req = new SendMessageToZFB.Req();
                 req.message = mediaMessage;
-
                 //调用api接口发送消息到支付宝
                 api.sendReq(req);
                 break;
@@ -206,19 +205,20 @@ public class AliShare extends ShareApi implements IAPAPIEventHandler {
 
         switch (baseResp.errCode) {
             case BaseResp.ErrCode.ERR_OK://发送成功
-
+                callbackShareOk();
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL://发送取消
-
+                callbackCancel();
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED://权限验证失败
-
+                callbackShareFail("权限验证失败");
                 break;
             case BaseResp.ErrCode.ERR_SENT_FAILED://发送失败
-
+                callbackShareFail("发送失败");
                 break;
             default:
                 //未知错误
+                callbackShareFail("未知错误");
                 break;
         }
 

@@ -236,12 +236,12 @@ public class MainActivity extends AppCompatActivity {
                 v.startAnimation(shake);
             }
         });
-        //支付宝
+        //支付宝分享
         findViewById(R.id.btn_share_weibo).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 AliShare aliShare = new AliShare(MainActivity.this, onShareListener);
-                aliShare.doShare(AliShareEntity.createTextInfo(getExternalFilesDir(null) + "/aaa.png"));
+                aliShare.doShare(AliShareEntity.createTextInfo("/aaa.png"));
                 spi = aliShare;
                 v.startAnimation(shake);
                 return true;

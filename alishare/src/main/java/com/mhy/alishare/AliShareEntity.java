@@ -1,7 +1,6 @@
 package com.mhy.alishare;
 
 import androidx.annotation.DrawableRes;
-
 import com.mhy.socialcommon.ShareEntity;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.socialcommon.annotation.ParamsRequired;

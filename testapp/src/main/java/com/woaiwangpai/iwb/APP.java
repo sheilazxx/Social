@@ -20,7 +20,7 @@ public class APP extends Application {
     }
 
     private void initSocial() {
-        AliShare.setAppId("2018111362152255");///2015060900117932
+        AliShare.setAppId("2018111362152255");///2015060900117932//2018111362152255
         WxSocial.setWeixinId("wxbddb62b534debb5f");
         QqSocial.setAppId("101807669");
         WbSocial.setWbApp("2045436852",
