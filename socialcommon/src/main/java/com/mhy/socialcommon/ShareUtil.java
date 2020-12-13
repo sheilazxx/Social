@@ -499,10 +499,7 @@ public class ShareUtil {
     }
 
     /**
-     * 启动主页
-     * @param packname
-     * @param className
-     * @param bundle
+     * 启动外部app主页
      */
     public void openOutMain(String packname, String className, Bundle bundle) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -517,10 +514,7 @@ public class ShareUtil {
     }
 
     /**
-     * Intent.ACTION_VIEW 非主页
-     * @param className
-     * @param bundle
-     * @param flag
+     * Intent.ACTION_VIEW 非主页 外部app
      */
     public void openOutActivity(String packname, String className, Bundle bundle, int flag) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -547,37 +541,6 @@ public class ShareUtil {
         }
     }
 
-    /**
-     * 是否安装某APP
-     *
-     * @param pack 包名  "com.eg.android.AlipayGphone"
-     * @return true 已安装
-     */
-    protected boolean hasInstall(String pack) {
-        PackageManager pm = mActivity.getPackageManager();
-        try {
-            PackageInfo info = pm.getPackageInfo(pack, 0);
-            return info != null;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * intent是否可达
-     *
-     * @param intent intent.putE等
-     * @return true ok
-     */
-    protected boolean isActivityAvailable(Intent intent) {
-        PackageManager pm = mActivity.getPackageManager();
-        if (pm == null) {
-            return false;
-        }
-        List<ResolveInfo> list = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        return list != null && list.size() > 0;
-    }
 
     /**
      * 打开weixin扫一扫界面 如需收款，请自行操作保存收款码到相册步骤
@@ -621,6 +584,35 @@ public class ShareUtil {
         openUrl(AliPay_Scan+AliPay_Qr + urlCode);
     }
 
+    /**
+     * 是否安装某APP
+     * @param pack 包名  "com.eg.android.AlipayGphone"
+     * @return true 已安装
+     */
+    protected boolean hasInstall(String pack) {
+        PackageManager pm = mActivity.getPackageManager();
+        try {
+            PackageInfo info = pm.getPackageInfo(pack, 0);
+            return info != null;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * intent是否可达
+     * @param intent intent.putE等
+     * @return true ok
+     */
+    protected boolean isActivityAvailable(Intent intent) {
+        PackageManager pm = mActivity.getPackageManager();
+        if (pm == null) {
+            return false;
+        }
+        List<ResolveInfo> list = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list != null && list.size() > 0;
+    }
     //判断是否安装支付宝app
     public boolean checkAliPayInstalled() {
         Uri uri = Uri.parse(ShareUtil.AliPay);

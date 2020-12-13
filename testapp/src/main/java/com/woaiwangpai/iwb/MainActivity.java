@@ -365,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onCancel(SocialType type) {
-
+            Toast.makeText(MainActivity.this, "分享cancel", Toast.LENGTH_SHORT).show();
         }
     };
 
